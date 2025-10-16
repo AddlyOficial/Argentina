@@ -1,0 +1,1837 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Negocios</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .section-container {
+            display: none;
+        }
+        .section-container.active {
+            display: block;
+        }
+        /* Style for disabled buttons */
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        /* Style for invalid fields */
+        .invalid-field {
+            border-color: #ef4444; /* red-500 */
+            --tw-ring-color: #ef4444;
+        }
+        .highlight-finish-btn {
+            animation: glow 2.5s ease-in-out;
+        }
+        @keyframes glow {
+            0% { box-shadow: 0 0 0px #60a5fa; } /* blue-400 */
+            50% { box-shadow: 0 0 25px 8px #60a5fa; }
+            100% { box-shadow: 0 0 0px #60a5fa; }
+        }
+        /* Custom toggle switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #2563eb; /* blue-600 */
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #2563eb; /* blue-600 */
+        }
+        /* Pop-up Modal Styles */
+        #success-modal-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+        #success-modal-box {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-white">
+
+    <div id="success-modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden opacity-0">
+        <div id="success-modal-box" class="bg-white rounded-2xl shadow-xl p-8 max-w-sm w-full text-center transform scale-95 opacity-0">
+            <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-green-100 mb-4">
+                <svg class="h-12 w-12 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <h3 id="modal-title" class="text-2xl font-bold text-gray-800 mb-2">¡Éxito!</h3>
+            <p id="modal-message" class="text-gray-600 mb-6">La operación se completó correctamente.</p>
+            <button id="modal-close-btn" class="w-full bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
+                Entendido
+            </button>
+        </div>
+    </div>
+
+    <div id="initial-view">
+        <header class="bg-white shadow-md sticky top-0 z-40">
+            <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+                <div>
+                     <img src="https://i.postimg.cc/LsTK3hF9/logo-gen-camp.png" alt="Logo Addly" class="h-12">
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <button id="dropdown-register-button" data-dropdown-toggle="dropdown-register" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center" type="button">
+                        Regístrate
+                        <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                        </svg>
+                    </button>
+                    
+                    <div id="dropdown-register" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
+                        <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdown-register-button">
+                          <li>
+                            <a href="#" id="register-driver-nav" class="block px-4 py-2 hover:bg-gray-100">Conductor</a>
+                          </li>
+                          <li>
+                            <a href="#" id="register-graph-nav" class="block px-4 py-2 hover:bg-gray-100">Taller Gráfico</a>
+                          </li>
+                        </ul>
+                    </div>
+
+                </div>
+                 <button id="mobile-menu-button" class="md:hidden flex items-center">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </nav>
+            
+            <div id="mobile-menu" class="md:hidden hidden px-6 pt-2 pb-4 space-y-2">
+                <a href="#" id="register-driver-nav-mobile" class="block text-gray-800 font-medium hover:text-blue-600">Registrarse como Conductor</a>
+                <a href="#" id="register-graph-nav-mobile" class="block text-gray-800 font-medium hover:text-blue-600">Registrarse como Taller</a>
+            </div>
+        </header>
+
+        <main>
+            
+            <section class="relative">
+                
+                <div id="default-carousel" class="absolute inset-0 w-full h-full z-0" data-carousel="slide">
+                    
+                    <div class="relative h-full overflow-hidden">
+                         
+                        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                            <img src="https://i.postimg.cc/zGMD8y7P/Imagen-de-Fondo-Principal-Hero-Section-20251015-193124-0000.jpg" class="absolute block w-full h-full object-cover" alt="...">
+                        </div>
+                        
+                        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                            <img src="https://i.postimg.cc/y856sDjM/Imagen-de-Fondo-Principal-Hero-Section-20251015-193125-0001.jpg" class="absolute block w-full h-full object-cover" alt="...">
+                        </div>
+                        
+                        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                            <img src="https://i.postimg.cc/YSWr9tDX/Imagen-de-Fondo-Principal-Hero-Section-20251015-193125-0002.jpg" class="absolute block w-full h-full object-cover" alt="...">
+                        </div>
+                        
+                        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                            <img src="https://i.postimg.cc/t4fRpskd/Imagen-de-Fondo-Principal-Hero-Section-20251015-193125-0003.jpg" class="absolute block w-full h-full object-cover" alt="...">
+                        </div>
+                         
+                        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                            <img src="https://i.postimg.cc/52G9bXgp/Imagen-de-Fondo-Principal-Hero-Section-20251015-193126-0004.jpg" class="absolute block w-full h-full object-cover" alt="...">
+                        </div>
+                         
+                        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                            <img src="https://i.postimg.cc/RZ8C4WdP/Imagen-de-Fondo-Principal-Hero-Section-20251015-193126-0005.jpg" class="absolute block w-full h-full object-cover" alt="...">
+                        </div>
+                         
+                        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                            <img src="https://i.postimg.cc/L8742JDC/Imagen-de-Fondo-Principal-Hero-Section-20251015-193126-0006.jpg" class="absolute block w-full h-full object-cover" alt="...">
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div class="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
+
+                <!-- Content -->
+                <div class="relative container mx-auto px-6 py-32 text-center text-white z-20">
+                    <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">PUBLICIDAD EN MOVIMIENTO QUE GARANTIZA RESULTADOS REALES.</h1>
+                    <p class="mt-4 text-lg md:text-xl max-w-3xl mx-auto">Transformamos la rutina de la ciudad en tu valla publicitaria más efectiva. Asegura que tu marca, evento o producto sea visto en cada kilómetro y por miles de personas.</p>
+                    <div class="mt-8">
+                        <a href="#cotizador" class="bg-yellow-400 text-gray-900 font-bold py-2 px-2 text-xs rounded-lg md:py-4 md:px-10 md:text-lg hover:bg-yellow-500 transition-colors">CREAR MI CAMPAÑA Y GARANTIZAR MI ALCANCE</a>
+                    </div>
+                     <div class="mt-12 text-center">
+                        <p class="text-gray-300">Visto por más de 1.000.000 de personas al mes.</p>
+                    </div>
+                </div>
+            </section>
+            
+            
+            <section class="py-20 bg-gray-50">
+                <div class="container mx-auto px-6 text-center">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-12">Diseña el Impacto. Nosotros lo Ponemos a Rodar.</h2>
+                    <div class="grid md:grid-cols-3 gap-12">
+                        <div class="text-center">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-600 text-white font-bold text-2xl mx-auto mb-4">01</div>
+                            <h3 class="text-xl font-semibold mb-2">El Alcance</h3>
+                            <p class="font-semibold text-gray-700 mb-2">Diseña tu Ruta y Cobertura</p>
+                            <p class="text-gray-600">Utiliza nuestro cotizador para seleccionar la superficie (cm2) y las Zonas de Mayor Interés. Nosotros elegimos la flota ideal para tu objetivo.</p>
+                        </div>
+                        <div class="text-center">
+                             <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-600 text-white font-bold text-2xl mx-auto mb-4">02</div>
+                            <h3 class="text-xl font-semibold mb-2">Instalación</h3>
+                            <p class="font-semibold text-gray-700 mb-2">Producción y Montaje Sin Esfuerzo</p>
+                            <p class="text-gray-600">Nuestro equipo de socios gráficos e instaladores se encarga de la fabricación y la aplicación profesional del diseño. Tu publicidad se instala de forma rápida y con calidad garantizada.</p>
+                        </div>
+                        <div class="text-center">
+                             <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-600 text-white font-bold text-2xl mx-auto mb-4">03</div>
+                            <h3 class="text-xl font-semibold mb-2">Verificación</h3>
+                             <p class="font-semibold text-gray-700 mb-2">Resultados en Vivo y Sin Sorpresas</p>
+                            <p class="text-gray-600">Accede a reportes detallados y verificación constante. Te garantizamos que tu mensaje sigue en la calle, generando impacto.</p>
+                        </div>
+                    </div>
+                    <div class="mt-16">
+                         <a href="#cotizador" class="bg-yellow-400 text-gray-900 font-bold py-3 px-8 rounded-lg text-lg hover:bg-yellow-500 transition-colors">Empezar a cotizar</a>
+                    </div>
+                </div>
+            </section>
+            
+            
+            <section class="py-20">
+                 <div class="container mx-auto px-6 text-center">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-12">Socios de marca</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-12 items-center">
+                        <img src="https://i.postimg.cc/NjVGBKD9/Secci-n-Socios-de-marca-20251015-193216-0000.jpg" alt="Socio 1" class="h-12 mx-auto transition-all">
+                        <img src="https://i.postimg.cc/rwzyB11r/Secci-n-Socios-de-marca-20251015-193216-0001.jpg" alt="Socio 2" class="h-12 mx-auto transition-all">
+                        <img src="https://i.postimg.cc/wj3xCXXR/Secci-n-Socios-de-marca-20251015-193217-0002.jpg" alt="Socio 3" class="h-12 mx-auto transition-all">
+                        <img src="https://i.postimg.cc/YCj2566G/Secci-n-Socios-de-marca-20251015-193217-0003.jpg" alt="Socio 4" class="h-12 mx-auto transition-all">
+                    </div>
+                 </div>
+            </section>
+            
+            
+            <section id="flota" class="bg-gray-50 py-20">
+                <div class="container mx-auto px-6 flex flex-col md:flex-row items-center gap-12">
+                    <div class="md:w-1/2 text-center md:text-left">
+                        <h2 class="text-4xl font-extrabold text-gray-900 mb-4">GANA DINERO CONDUCIENDO</h2>
+                        <p class="text-gray-600 text-lg mb-8">Convierte tu auto, moto o bici en una fuente de ingresos extra. Sin esfuerzo, sin desvíos.</p>
+                        <button id="show-drivers-cta" class="bg-green-500 text-white font-bold py-4 px-10 rounded-lg text-lg hover:bg-green-600 transition-colors transform hover:scale-105">Únete a la Flota</button>
+                    </div>
+                     <div class="md:w-1/2">
+                        <img src="https://i.postimg.cc/L8h4cttk/Secci-n-GRAFICA-CONDUCTOR-20251015-193256-0001.jpg" class="rounded-lg shadow-xl" alt="Conductor con su auto ploteado">
+                    </div>
+                </div>
+            </section>
+
+             
+            <section id="graficas" class="bg-white py-20">
+                <div class="container mx-auto px-6 flex flex-col md:flex-row-reverse items-center gap-12">
+                    <div class="md:w-1/2 text-center md:text-left">
+                        <h2 class="text-4xl font-extrabold text-gray-900 mb-4">Socio Gráfico: Flujo de Trabajo Constante</h2>
+                        <p class="text-gray-600 text-lg mb-8">Asegura un volumen de rotulaciones predecible y rápido. Únete a la red de talleres que crece con Addly.</p>
+                        <button id="show-graphs-cta" class="bg-blue-600 text-white font-bold py-4 px-10 rounded-lg text-lg hover:bg-blue-700 transition-colors transform hover:scale-105">Registra tu Taller</button>
+                    </div>
+                     <div class="md:w-1/2">
+                        <img src="https://i.postimg.cc/Z50YG88b/Secci-n-GRAFICA-CONDUCTOR-20251015-193256-0000.jpg" class="rounded-lg shadow-xl" alt="Instalador aplicando vinilo">
+                    </div>
+                </div>
+            </section>
+            
+            
+            <section class="py-20 bg-gray-50">
+                <div class="container mx-auto px-6">
+                    <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Campañas en acción</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <img src="https://i.postimg.cc/8z3kN74r/Galer-a-Campa-as-en-acci-n-20251015-193152-0000.jpg" class="rounded-lg shadow-md aspect-video object-cover" alt="Campaña 1">
+                        <img src="https://i.postimg.cc/K8Vcx1fM/Galer-a-Campa-as-en-acci-n-20251015-193152-0001.jpg" class="rounded-lg shadow-md aspect-video object-cover" alt="Campaña 2">
+                        <img src="https://i.postimg.cc/DwDfnS6G/Galer-a-Campa-as-en-acci-n-20251015-193152-0002.jpg" class="rounded-lg shadow-md aspect-video object-cover" alt="Campaña 3">
+                    </div>
+                </div>
+            </section>
+             
+            <section id="cotizador" class="py-20 bg-blue-700 text-white">
+                 <div class="container mx-auto px-6 text-center">
+                    <h2 class="text-3xl font-bold mb-4">¿Listo para que tu marca llegue lejos?</h2>
+                    <p class="max-w-2xl mx-auto mb-8">Descubre el impacto de la publicidad móvil. Obtén una cotización personalizada para tu próxima campaña.</p>
+                    <a href="#clientes" class="bg-yellow-400 text-gray-900 font-bold py-3 px-8 rounded-lg text-lg hover:bg-yellow-500 transition-colors">Cotiza tu campaña ahora</a>
+                 </div>
+            </section>
+            
+        </main>
+
+        <footer class="bg-blue-800 text-white">
+            <div class="container mx-auto px-6 py-12">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div>
+                        <h3 class="font-bold mb-4">Anunciantes</h3>
+                        <ul>
+                            <li class="mb-2"><a href="#" id="footer-register-driver" class="hover:underline">Conviértete en conductor</a></li>
+                             <li><a href="#" id="footer-register-graph" class="hover:underline">Quiero asociar mi grafica</a></li>
+                        </ul>
+                    </div>
+                    <div class="md:justify-self-end md:col-start-3">
+                         <img src="https://i.postimg.cc/LsTK3hF9/logo-gen-camp.png" alt="Logo Addly Blanco" class="h-16 mb-4 filter brightness-0 invert">
+                        <div class="flex space-x-4">
+                            <a href="https://www.instagram.com/addlyoficial?igsh=M3R5dW1lOWlqZzlo" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664 4.771 4.919 4.919 1.266.058 1.644.07 4.85.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.281-.058-1.689-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.441 1.441 1.441 1.441-.645 1.441-1.441-.645-1.44-1.441-1.44z"/></svg></a>
+                            <a href="https://wa.me/message/B4B2BFKSPAUBI1" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.61 15.35 3.48 16.82L2.1 21.9L7.29 20.53C8.7 21.32 10.33 21.82 12.04 21.82C17.5 21.82 21.95 17.37 21.95 11.91C21.95 6.45 17.5 2 12.04 2ZM12.04 3.63C16.56 3.63 20.32 7.39 20.32 11.91C20.32 16.43 16.56 20.19 12.04 20.19C10.46 20.19 8.96 19.74 7.68 18.91L7.21 18.63L3.83 19.52L4.74 16.23L4.44 15.74C3.63 14.38 3.17 12.87 3.17 11.91C3.17 7.39 6.93 3.63 12.04 3.63ZM9.31 6.51C9.09 6.51 8.76 6.58 8.54 6.91C8.32 7.24 7.51 8.01 7.51 9.28C7.51 10.55 8.56 11.72 8.71 11.92C8.86 12.12 10.15 14.19 12.22 15.02C13.88 15.69 14.39 15.54 14.79 15.49C15.46 15.41 16.42 14.85 16.64 14.24C16.86 13.63 16.86 13.11 16.79 12.98C16.71 12.85 16.54 12.78 16.29 12.65C16.03 12.52 14.89 11.96 14.67 11.88C14.45 11.79 14.28 11.74 14.11 11.99C13.94 12.24 13.43 12.85 13.28 13.02C13.13 13.19 12.98 13.24 12.73 13.11C11.93 12.72 11.08 12.16 10.19 11.2C9.49 10.45 9.02 9.55 8.87 9.28C8.72 9.01 8.84 8.87 8.99 8.74C9.11 8.63 9.28 8.41 9.43 8.24C9.58 8.07 9.63 7.97 9.73 7.79C9.83 7.61 9.78 7.46 9.71 7.33C9.63 7.21 9.31 6.51 9.31 6.51Z"/></svg></a>
+                        </div>
+                    </div>
+                </div>
+                 <div class="mt-8 pt-8 border-t border-blue-700 text-center text-sm">
+                    <p>&copy; 2025 Gestión de Negocio. Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div id="app-content" class="hidden">
+        <header class="bg-white shadow-md p-4 sticky top-0 z-50">
+            <div class="container mx-auto flex justify-between items-center">
+                <button id="back-to-home" class="text-gray-600 hover:text-gray-800 transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                </button>
+                <h1 class="text-2xl font-bold text-gray-800">Gestión de Negocio</h1>
+                <div class="w-6"></div> </div>
+        </header>
+    
+        <main class="container mx-auto p-6 flex flex-col items-center justify-center flex-grow">
+            <section id="drivers-section" class="section-container w-full">
+                 <div class="container mx-auto px-6 text-center mb-12">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-12">Así de Fácil es Ganar Dinero Conduciendo</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div class="text-center">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-600 text-white font-bold text-2xl mx-auto mb-4">01</div>
+                            <h3 class="text-xl font-semibold mb-2">Seguridad del Vehículo</h3>
+                            <p class="font-semibold text-gray-700 mb-2">¿Es Seguro para mi Auto/Moto/Bici?</p>
+                            <p class="text-gray-600">Absolutamente. Utilizamos vinilos y cartelería de alta calidad, seguros para la pintura y el material de tu vehículo. La instalación y el retiro son realizados exclusivamente por instaladores profesionales de nuestra red, sin dejar rastros.</p>
+                        </div>
+                        <div class="text-center">
+                             <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-600 text-white font-bold text-2xl mx-auto mb-4">02</div>
+                            <h3 class="text-xl font-semibold mb-2">El Trabajo (Esfuerzo Cero)</h3>
+                            <p class="font-semibold text-gray-700 mb-2">¿Qué tengo que hacer?</p>
+                            <p class="text-gray-600">Solo Conducir. Usas tu vehículo como siempre. Si hay una campaña disponible en tu zona, te lo notificamos. Aceptas la campaña, agendamos la instalación y empiezas a generar ingresos mientras circulas. Es un ingreso pasivo y sin esfuerzo.</p>
+                        </div>
+                        <div class="text-center">
+                             <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-600 text-white font-bold text-2xl mx-auto mb-4">03</div>
+                            <h3 class="text-xl font-semibold mb-2">Las Ganancias</h3>
+                             <p class="font-semibold text-gray-700 mb-2">¿Cuánto gano y cómo me pagan?</p>
+                            <p class="text-gray-600">Ganancias Mensuales Fijas. Recibirás tu pago completo al finalizar cada mes de campaña. Solo tienes que cumplir con las verificaciones semanales (una foto sencilla) para confirmar el buen estado de la publicidad.</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-600 text-white font-bold text-2xl mx-auto mb-4">04</div>
+                           <h3 class="text-xl font-semibold mb-2">Proceso y Soporte</h3>
+                            <p class="font-semibold text-gray-700 mb-2">¿Cuál es el proceso de instalación y retiro?</p>
+                           <p class="text-gray-600">Te notificamos la campaña y si aceptas, te enviamos la fecha, hora y dirección de nuestro instalador. Cuando la campaña termina, te contactamos con una semana de anticipación para coordinar el retiro gratuito del vinilo.</p>
+                       </div>
+                    </div>
+                </div>
+                <img src="https://i.postimg.cc/LsTK3hF9/logo-gen-camp.png" alt="Logo Addly" class="mx-auto mb-6 h-32">
+                <h2 class="text-4xl font-semibold text-gray-800 mb-8 text-center">¡Tu Vehículo es Dinero! Regístrate como Socio Chofer</h2>
+                <div class="flex flex-wrap justify-center gap-8 max-w-4xl w-full mx-auto">
+                    <div id="personal-data-container" class="bg-white p-10 rounded-2xl shadow-xl border border-gray-200 max-w-2xl w-full">
+                        <h3 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-2">1. Tus Datos de Acceso Rápido</h3>
+                        <form id="personal-data-form" novalidate>
+                            <div class="mb-5">
+                                <label for="full-name" class="block text-gray-600 font-medium mb-2">Nombre y Apellido</label>
+                                <input type="text" id="full-name" name="full-name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Ej: Juan Pérez" required>
+                            </div>
+                            <div class="mb-5">
+                                <label for="province" class="block text-gray-600 font-medium mb-2">Provincia</label>
+                                <select id="province" name="province" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" required>
+                                    <option value="">¿Dónde quieres empezar a ganar?</option>
+                                    <option value="Buenos Aires">Buenos Aires</option>
+                                    <option value="Catamarca">Catamarca</option>
+                                    <option value="Chaco">Chaco</option>
+                                    <option value="Chubut">Chubut</option>
+                                    <option value="Córdoba">Córdoba</option>
+                                    <option value="Corrientes">Corrientes</option>
+                                    <option value="Entre Ríos">Entre Ríos</option>
+                                    <option value="Formosa">Formosa</option>
+                                    <option value="Jujuy">Jujuy</option>
+                                    <option value="La Pampa">La Pampa</option>
+                                    <option value="La Rioja">La Rioja</option>
+                                    <option value="Mendoza">Mendoza</option>
+                                    <option value="Misiones">Misiones</option>
+                                    <option value="Neuquén">Neuquén</option>
+                                    <option value="Río Negro">Río Negro</option>
+                                    <option value="Salta">Salta</option>
+                                    <option value="San Juan">San Juan</option>
+                                    <option value="San Luis">San Luis</option>
+                                    <option value="Santa Cruz">Santa Cruz</option>
+                                    <option value="Santa Fe">Santa Fe</option>
+                                    <option value="Santiago del Estero">Santiago del Estero</option>
+                                    <option value="Tierra del Fuego, Antártida e Islas del Atlántico Sur">Tierra del Fuego, Antártida e Islas del Atlántico Sur</option>
+                                    <option value="Tucumán">Tucumán</option>
+                                </select>
+                            </div>
+                            <div class="mb-5">
+                                <label for="personal-city" class="block text-gray-600 font-medium mb-2">Ciudad</label>
+                                <select id="personal-city" name="personal-city" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" required>
+                                    <option value="">Selecciona tu provincia primero</option>
+                                </select>
+                            </div>
+                            <div class="mb-5">
+                                <label for="address-street" class="block text-gray-600 font-medium mb-2">Dirección</label>
+                                <div class="flex gap-4">
+                                    <input type="text" id="address-street" name="address-street" class="flex-grow px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Calle" required>
+                                    <input type="text" id="address-number" name="address-number" class="w-1/3 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Número" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
+                                </div>
+                            </div>
+                            <div class="mb-5">
+                                <label for="phone" class="block text-gray-600 font-medium mb-2">Teléfono</label>
+                                <input type="tel" id="phone" name="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Para coordinar tu primera campaña exclusiva" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
+                            </div>
+                            <div class="mb-5">
+                                <label for="email" class="block text-gray-600 font-medium mb-2">Correo Electrónico</label>
+                                <input type="email" id="email" name="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Te enviaremos las ofertas de campaña. (Confidencial)" required>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
+                                Guardar y Continuar
+                            </button>
+                        </form>
+                    </div>
+    
+                    <div id="vehicle-data-container" class="bg-white p-10 rounded-2xl shadow-xl border border-gray-200 hidden max-w-2xl w-full">
+                        <div class="relative">
+                            <h3 id="vehicle-form-title" class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-2 pr-32">2. Tu Vehículo: El Motor de tus Ganancias</h3>
+                             <button id="scroll-to-finish-btn" class="absolute top-[-10px] right-0 bg-green-500 text-white font-bold py-2 px-3 rounded-lg flex items-center gap-2 hover:bg-green-600 transition-colors duration-300 shadow-md transform hover:scale-105 hidden">
+                                ¡TERMINÉ!
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div id="driver-id-display" class="hidden bg-gray-100 p-4 rounded-lg text-center mb-4 border border-gray-300">
+                            <p class="text-gray-600 font-medium">ID de Conductor:</p>
+                            <span id="generated-id" class="text-3xl font-bold text-blue-600"></span>
+                        </div>
+                        <form id="vehicle-data-form" novalidate>
+                            <div class="mb-5">
+                                <label for="vehicle-type" class="block text-gray-600 font-medium mb-2">Tipo de Vehículo</label>
+                                <select id="vehicle-type" name="vehicle-type" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" required>
+                                    <option value="">Auto, Moto, Bici. ¿Cuál genera tus ganancias?</option>
+                                    <option value="AUTO/CAMIONETA">AUTO/CAMIONETA</option>
+                                    <option value="MOTO">MOTO</option>
+                                    <option value="BICI">BICI</option>
+                                </select>
+                            </div>
+                            <div id="backpack-option-container" class="mb-5 hidden">
+                                <div class="flex items-center p-4 border border-gray-200 rounded-lg bg-gray-50">
+                                    <input id="wants-backpack" name="wants-backpack" type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                    <label for="wants-backpack" class="ml-3 block text-gray-700 font-medium flex items-center cursor-pointer">
+                                        Quiero sumar mi mochila de repartidor
+                                        <div class="relative flex items-center ml-2 group">
+                                            <span class="bg-black text-white rounded-full h-5 w-5 flex items-center justify-center text-xs font-bold">i</span>
+                                            <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 text-sm text-white bg-gray-900 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+                                                Podes agregar publicidad en tu mochila de repartidor si la consideras disponible para hacer publicidad y ganar unos $ de mas !!
+                                                <div class="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-x-8 border-x-transparent border-t-8 border-t-gray-900"></div>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="brand-container" class="mb-5">
+                                <label for="brand" class="block text-gray-600 font-medium mb-2">Marca</label>
+                                <input type="text" id="brand" name="brand" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Ej: Ford, Honda, Scott" required>
+                            </div>
+                            <div id="model-container" class="mb-5">
+                                <label for="model" class="block text-gray-600 font-medium mb-2">Modelo</label>
+                                <input type="text" id="model" name="model" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Ej: Ranger, YBR, Aspect" required>
+                            </div>
+                            <div class="mb-5">
+                                <label for="color" class="block text-gray-600 font-medium mb-2">Color</label>
+                                <input type="text" id="color" name="color" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Para que el vinilo combine perfecto" required>
+                            </div>
+                            <div id="year-container" class="mb-5">
+                                <label for="year" class="block text-gray-600 font-medium mb-2">Año</label>
+                                <input type="number" id="year" name="year" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Ej: 2022" required>
+                            </div>
+                            <div id="license-plate-container" class="mb-5">
+                                <label for="license-plate" class="block text-gray-600 font-medium mb-2">Patente / Matrícula</label>
+                                <input type="text" id="license-plate" name="license-plate" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Ej: AA 123 BC (Información confidencial)" required>
+                            </div>
+                            <div class="mb-5">
+                                <label for="vehicle-province" class="block text-gray-600 font-medium mb-2">Provincia (del vehículo)</label>
+                                <select id="vehicle-province" name="vehicle-province" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" required>
+                                    <option value="">Seleccione una provincia</option>
+                                    <option value="Buenos Aires">Buenos Aires</option>
+                                    <option value="Catamarca">Catamarca</option>
+                                    <option value="Chaco">Chaco</option>
+                                    <option value="Chubut">Chubut</option>
+                                    <option value="Córdoba">Córdoba</option>
+                                    <option value="Corrientes">Corrientes</option>
+                                    <option value="Entre Ríos">Entre Ríos</option>
+                                    <option value="Formosa">Formosa</option>
+                                    <option value="Jujuy">Jujuy</option>
+                                    <option value="La Pampa">La Pampa</option>
+                                    <option value="La Rioja">La Rioja</option>
+                                    <option value="Mendoza">Mendoza</option>
+                                    <option value="Misiones">Misiones</option>
+                                    <option value="Neuquén">Neuquén</option>
+                                    <option value="Río Negro">Río Negro</option>
+                                    <option value="Salta">Salta</option>
+                                    <option value="San Juan">San Juan</option>
+                                    <option value="San Luis">San Luis</option>
+                                    <option value="Santa Cruz">Santa Cruz</option>
+                                    <option value="Santa Fe">Santa Fe</option>
+                                    <option value="Santiago del Estero">Santiago del Estero</option>
+                                    <option value="Tierra del Fuego, Antártida e Islas del Atlántico Sur">Tierra del Fuego, Antártida e Islas del Atlántico Sur</option>
+                                    <option value="Tucumán">Tucumán</option>
+                                </select>
+                            </div>
+                            <div class="mb-5">
+                                <label for="vehicle-city" class="block text-gray-600 font-medium mb-2">Ciudad (del vehículo)</label>
+                                <select id="vehicle-city" name="vehicle-city" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" required>
+                                    <option value="">Seleccione una provincia primero</option>
+                                </select>
+                            </div>
+                            <div class="mb-5">
+                                <label for="zone-input" class="block text-gray-600 font-medium mb-2">Zona de Circulación Habitual</label>
+                                <div class="relative">
+                                    <input type="text" id="zone-input" class="w-full px-4 py-3 pr-16 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Ej: Centro, Nueva Córdoba, Ruta 9. (Máximo impacto)">
+                                    <button type="button" id="add-zone-btn" class="absolute inset-y-0 right-0 hidden bg-blue-600 text-white font-semibold py-2 px-4 m-1 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">OK</button>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">Zonas por las que el vehículo circula generalmente, esto nos ayuda a encontrar campañas que se adapten a tus recorridos, mínimo 3.</p>
+                                <div id="zone-pills-container" class="mt-3 flex flex-wrap gap-2">
+                                </div>
+                            </div>
+                             <div class="mb-5">
+                                <label for="address-street-vehicle" class="block text-gray-600 font-medium mb-2">Dirección de Residencia (del vehículo)</label>
+                                <div class="flex gap-4">
+                                    <input type="text" id="address-street-vehicle" name="address-street-vehicle" class="flex-grow px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Calle. Para coordinar la instalación." required>
+                                    <input type="text" id="address-number-vehicle" name="address-number-vehicle" class="w-1/3 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Número" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
+                                </div>
+                            </div>
+                             <div class="mb-5">
+                                <label for="image" class="block text-gray-600 font-medium mb-2">Foto de tu Vehículo (Opcional)</label>
+                                <div class="flex items-center">
+                                    <input type="file" id="image" name="image" accept="image/*" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
+                                    <span id="image-upload-indicator" class="text-sm text-blue-600 ml-2 hidden"></span>
+                                </div>
+                            </div>
+                        </form>
+                        <div id="added-vehicles-list" class="mt-6 border-t pt-4 border-gray-300">
+                            </div>
+                        <div class="flex flex-col sm:flex-row gap-4 mt-6">
+                            <button id="add-vehicle-btn" class="w-full sm:w-1/2 bg-gray-400 text-gray-800 font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-gray-500 transition duration-300">
+                                + Agregar Otro Vehículo y Duplicar Ganancias
+                            </button>
+                            <button id="finish-vehicles-btn" class="w-full sm:w-1/2 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
+                                ¡Listo! Empezar a Recibir Ofertas
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+    
+            <section id="graphs-section" class="section-container w-full">
+                <div class="container mx-auto px-6 text-center mb-12">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-12">Cómo Crecer con Addly: Beneficios para Socios Gráficos</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div class="text-center">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-600 text-white font-bold text-2xl mx-auto mb-4">01</div>
+                            <h3 class="text-xl font-semibold mb-2">Garantía de Trabajo</h3>
+                            <p class="font-semibold text-gray-700 mb-2">¿Cómo me aseguran un flujo de trabajo constante?</p>
+                            <p class="text-gray-600">Addly genera campañas de alto volumen para grandes marcas. Al formar parte de nuestra Red Nacional, te aseguramos una carga de trabajo constante y predecible que se ajusta a la capacidad semanal que nos indiques. No más tiempo ocioso en el taller.</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-600 text-white font-bold text-2xl mx-auto mb-4">02</div>
+                            <h3 class="text-xl font-semibold mb-2">El Proceso (Rapidez y Precio)</h3>
+                            <p class="font-semibold text-gray-700 mb-2">¿Cómo funciona el proceso de pedidos?</p>
+                            <p class="text-gray-600">Es un sistema rápido: Addly te enviará la solicitud de rotulación o fabricación con todos los detalles técnicos (incluyendo los moldes para el corte de policarbonato). Tú ejecutas el servicio en la fecha agendada.</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-600 text-white font-bold text-2xl mx-auto mb-4">03</div>
+                            <h3 class="text-xl font-semibold mb-2">Rentabilidad (El Precio Máximo)</h3>
+                            <p class="font-semibold text-gray-700 mb-2">¿Cómo garantizo mi ganancia?</p>
+                            <p class="text-gray-600">Nuestra plataforma está diseñada para el beneficio mutuo. En la tabla de costos, siempre utilizaremos tu Precio MÁXIMO (el costo más alto) para cotizar al cliente final. Esto asegura que tu margen esté cubierto sin importar la variación de tamaño del vehículo.</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-600 text-white font-bold text-2xl mx-auto mb-4">04</div>
+                            <h3 class="text-xl font-semibold mb-2">Requisito Clave</h3>
+                            <p class="font-semibold text-gray-700 mb-2">¿Qué servicios debo cumplir?</p>
+                            <p class="text-gray-600">Para ser un socio integral, tu taller debe tener la capacidad de realizar el ciclo completo de servicio: Instalación (aplicación) y Retiro (desinstalación y limpieza) de vinilos y cartelería, incluyendo el corte a medida de los paneles para bicicletas.</p>
+                        </div>
+                    </div>
+                </div>
+                <img src="https://i.postimg.cc/LsTK3hF9/logo-gen-camp.png" alt="Logo Addly" class="mx-auto mb-6 h-32">
+                <h2 class="text-4xl font-semibold text-gray-800 mb-8 text-center">¡Asóciate con Addly! Registro para Gráficas Profesionales</h2>
+                <div class="bg-white p-10 rounded-2xl shadow-xl border border-gray-200 max-w-2xl w-full mx-auto">
+                    <h3 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-2">1. Datos de tu Taller (Socio Gráfico)</h3>
+                    <form id="graphs-form" novalidate>
+                        <div class="mb-5">
+                            <label for="graph-name" class="block text-gray-600 font-medium mb-2">Nombre de tu Taller / Marca</label>
+                            <input type="text" id="graph-name" name="graph-name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Ej: Rotulaciones Express" required>
+                        </div>
+                        <div class="mb-5">
+                            <label for="manager-name" class="block text-gray-600 font-medium mb-2">Nombre del Contacto Principal</label>
+                            <input type="text" id="manager-name" name="manager-name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Ej: Juan Pérez, Encargado de Instalación" required>
+                        </div>
+                        <div class="mb-5">
+                            <label for="graph-phone" class="block text-gray-600 font-medium mb-2">Teléfono de Contacto Rápido</label>
+                            <input type="tel" id="graph-phone" name="graph-phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Para coordinar instalaciones urgentes" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
+                        </div>
+                        <div class="mb-5">
+                            <label for="graph-email" class="block text-gray-600 font-medium mb-2">Correo Electrónico</label>
+                            <input type="email" id="graph-email" name="graph-email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Ej: contacto@taller.com" required>
+                        </div>
+                         <div class="mb-5">
+                            <label for="graphs-province" class="block text-gray-600 font-medium mb-2">Provincia</label>
+                            <select id="graphs-province" name="graphs-province" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" required>
+                                <option value="">Seleccione una provincia</option>
+                                <option value="Buenos Aires">Buenos Aires</option>
+                                <option value="Catamarca">Catamarca</option>
+                                <option value="Chaco">Chaco</option>
+                                <option value="Chubut">Chubut</option>
+                                <option value="Córdoba">Córdoba</option>
+                                <option value="Corrientes">Corrientes</option>
+                                <option value="Entre Ríos">Entre Ríos</option>
+                                <option value="Formosa">Formosa</option>
+                                <option value="Jujuy">Jujuy</option>
+                                <option value="La Pampa">La Pampa</option>
+                                <option value="La Rioja">La Rioja</option>
+                                <option value="Mendoza">Mendoza</option>
+                                <option value="Misiones">Misiones</option>
+                                <option value="Neuquén">Neuquén</option>
+                                <option value="Río Negro">Río Negro</option>
+                                <option value="Salta">Salta</option>
+                                <option value="San Juan">San Juan</option>
+                                <option value="San Luis">San Luis</option>
+                                <option value="Santa Cruz">Santa Cruz</option>
+                                <option value="Santa Fe">Santa Fe</option>
+                                <option value="Santiago del Estero">Santiago del Estero</option>
+                                <option value="Tierra del Fuego, Antártida e Islas del Atlántico Sur">Tierra del Fuego, Antártida e Islas del Atlántico Sur</option>
+                                <option value="Tucumán">Tucumán</option>
+                            </select>
+                        </div>
+                        <div class="mb-5">
+                            <label for="graph-location" class="block text-gray-600 font-medium mb-2">Ciudad</label>
+                            <select id="graph-location" name="graph-location" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" required>
+                                <option value="">Seleccione una provincia primero</option>
+                            </select>
+                        </div>
+                        <div class="mb-5">
+                            <label for="graph-address-street" class="block text-gray-600 font-medium mb-2">Dirección del Taller</label>
+                            <div class="flex gap-4">
+                                <input type="text" id="graph-address-street" name="graph-address-street" class="flex-grow px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Calle. Dinos dónde te encontramos." required>
+                                <input type="text" id="graph-address-number" name="graph-address-number" class="w-1/3 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Número" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
+                            </div>
+                        </div>
+                         <div class="mb-5">
+                            <label for="weekly-capacity" class="block text-gray-600 font-medium mb-2">Capacidad de Instalaciones Semanales (Unidades)</label>
+                            <input type="number" id="weekly-capacity" name="weekly-capacity" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Número" required>
+                             <p class="text-sm text-gray-600 mt-2">Número máximo de vehículos completos que pueden rotular a la semana. Necesitamos un número realista y conservador para garantizar el flujo de trabajo sin sobrecargar su capacidad.</p>
+                        </div>
+                        <div class="mb-5">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="block text-gray-600 font-medium">Días y Horarios de Atención</label>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="apply-all-hours" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                    <label for="apply-all-hours" class="ml-2 text-sm text-gray-600 cursor-pointer select-none">Aplicar el horario a todos los días</label>
+                                </div>
+                            </div>
+                            <div id="operating-hours-container" class="space-y-3 border border-gray-200 p-4 rounded-lg">
+                                </div>
+                             <p class="text-xs text-gray-500 mt-2">Seleccione los días que el taller está abierto e ingrese los horarios de atención.</p>
+                        </div>
+                        <div class="mb-5">
+                             <div class="flex items-center p-4 border border-gray-200 rounded-lg bg-gray-50">
+                                <input id="service-commitment" name="service-commitment" type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" required>
+                                <label for="service-commitment" class="ml-3 block text-gray-700 font-medium">
+                                    Compromiso con el Servicio Integral (Instalación y Retiro)
+                                </label>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2">Este campo es obligatorio. Al marcarlo, usted acepta y se compromete a realizar tanto la instalación como el retiro del vinilo en todos los vehículos asignados por Addly.</p>
+                        </div>
+                        <div class="mb-5 border-t border-gray-200 pt-5">
+                            <h4 class="text-xl font-semibold text-gray-700">Cotización por Vehículo y Partes</h4>
+                            <p class="text-sm text-gray-600 mt-2 mb-4">
+                                Ingrese el rango de cotización para cada tipo de instalación. Los precios pueden variar según el modelo y tamaño. Especifique el tipo de vinilo y las horas estimadas para completar el trabajo.
+                            </p>
+                            <div class="flex flex-col space-y-4">
+                                <div>
+                                    <p class="text-lg text-gray-700 p-3 border border-gray-200 rounded-lg bg-gray-100 font-semibold">Auto</p>
+                                    <div class="pl-6 mt-2 space-y-3">
+                                        <div class="p-3 border-l-4 border-blue-300 bg-gray-50 rounded-r-lg space-y-2">
+                                            <div class="flex justify-between items-center text-md text-gray-800 font-medium">
+                                                <span>Auto completo</span>
+                                                <span class="text-sm text-gray-500 font-normal">(8-12 m²)</span>
+                                            </div>
+                                            <div class="flex items-center justify-center gap-2">
+                                                <label for="price-from-auto-completo" class="text-sm text-gray-600">DESDE</label>
+                                                <input type="text" id="price-from-auto-completo" name="price-from-auto-completo" class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" placeholder="$">
+                                                <span class="text-gray-600 font-bold">-</span>
+                                                <label for="price-to-auto-completo" class="text-sm text-gray-600">HASTA</label>
+                                                <input type="text" id="price-to-auto-completo" name="price-to-auto-completo" class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" placeholder="$">
+                                            </div>
+                                            <div>
+                                                <input type="text" name="vinyl-auto-completo" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors placeholder:text-center" placeholder="Tipo de vinilo">
+                                            </div>
+                                            <div class="flex justify-center items-center gap-2">
+                                                <input type="text" name="installation-time-auto-completo" class="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-center" placeholder="Ej: 8" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                                                <span class="text-gray-600">horas</span>
+                                            </div>
+                                        </div>
+                                        <div class="p-3 border-l-4 border-blue-300 bg-gray-50 rounded-r-lg space-y-2">
+                                            <div class="flex justify-between items-center text-md text-gray-800 font-medium">
+                                                <span>Capot</span>
+                                                <span class="text-sm text-gray-500 font-normal">(18,000-23,000 cm²)</span>
+                                            </div>
+                                            <div class="flex items-center justify-center gap-2">
+                                                <label for="price-from-capot" class="text-sm text-gray-600">DESDE</label>
+                                                <input type="text" id="price-from-capot" name="price-from-capot" class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" placeholder="$">
+                                                <span class="text-gray-600 font-bold">-</span>
+                                                <label for="price-to-capot" class="text-sm text-gray-600">HASTA</label>
+                                                <input type="text" id="price-to-capot" name="price-to-capot" class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" placeholder="$">
+                                            </div>
+                                            <div>
+                                                <input type="text" name="vinyl-capot" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors placeholder:text-center" placeholder="Tipo de vinilo">
+                                            </div>
+                                             <div class="flex justify-center items-center gap-2">
+                                                <input type="text" name="installation-time-capot" class="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-center" placeholder="Ej: 2" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                                                 <span class="text-gray-600">horas</span>
+                                            </div>
+                                        </div>
+                                        <div class="p-3 border-l-4 border-blue-300 bg-gray-50 rounded-r-lg space-y-2">
+                                            <div class="flex justify-between items-center text-md text-gray-800 font-medium">
+                                                <span>Puertas</span>
+                                                <span class="text-sm text-gray-500 font-normal">(10,000-14,000 cm² c/u)</span>
+                                            </div>
+                                            <div class="flex items-center justify-center gap-2">
+                                                <label for="price-from-puertas" class="text-sm text-gray-600">DESDE</label>
+                                                <input type="text" id="price-from-puertas" name="price-from-puertas" class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" placeholder="$">
+                                                <span class="text-gray-600 font-bold">-</span>
+                                                <label for="price-to-puertas" class="text-sm text-gray-600">HASTA</label>
+                                                <input type="text" id="price-to-puertas" name="price-to-puertas" class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" placeholder="$">
+                                            </div>
+                                            <div>
+                                                <input type="text" name="vinyl-puertas" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors placeholder:text-center" placeholder="Tipo de vinilo">
+                                            </div>
+                                            <div class="flex justify-center items-center gap-2">
+                                                <input type="text" name="installation-time-puertas" class="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-center" placeholder="Ej: 1.5" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                                                 <span class="text-gray-600">horas</span>
+                                            </div>
+                                        </div>
+                                        <div class="p-3 border-l-4 border-blue-300 bg-gray-50 rounded-r-lg space-y-2">
+                                            <div class="flex justify-between items-center text-md text-gray-800 font-medium">
+                                                <span>Baul</span>
+                                                <span class="text-sm text-gray-500 font-normal">(5,000-7,000 cm²)</span>
+                                            </div>
+                                            <div class="flex items-center justify-center gap-2">
+                                                <label for="price-from-baul" class="text-sm text-gray-600">DESDE</label>
+                                                <input type="text" id="price-from-baul" name="price-from-baul" class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" placeholder="$">
+                                                <span class="text-gray-600 font-bold">-</span>
+                                                <label for="price-to-baul" class="text-sm text-gray-600">HASTA</label>
+                                                <input type="text" id="price-to-baul" name="price-to-baul" class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" placeholder="$">
+                                            </div>
+                                            <div>
+                                                <input type="text" name="vinyl-baul" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors placeholder:text-center" placeholder="Tipo de vinilo">
+                                            </div>
+                                            <div class="flex justify-center items-center gap-2">
+                                                <input type="text" name="installation-time-baul" class="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-center" placeholder="Ej: 1" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                                                 <span class="text-gray-600">horas</span>
+                                            </div>
+                                        </div>
+                                        <div class="p-3 border-l-4 border-blue-300 bg-gray-50 rounded-r-lg space-y-2">
+                                            <div class="flex justify-between items-center text-md text-gray-800 font-medium">
+                                                <span>Luneta</span>
+                                                <span class="text-sm text-gray-500 font-normal">(6,500-12,000 cm²)</span>
+                                            </div>
+                                            <div class="flex items-center justify-center gap-2">
+                                                <label for="price-from-luneta" class="text-sm text-gray-600">DESDE</label>
+                                                <input type="text" id="price-from-luneta" name="price-from-luneta" class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" placeholder="$">
+                                                <span class="text-gray-600 font-bold">-</span>
+                                                <label for="price-to-luneta" class="text-sm text-gray-600">HASTA</label>
+                                                <input type="text" id="price-to-luneta" name="price-to-luneta" class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" placeholder="$">
+                                            </div>
+                                            <div>
+                                                <input type="text" name="vinyl-luneta" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors placeholder:text-center" placeholder="Tipo de vinilo">
+                                            </div>
+                                            <div class="flex justify-center items-center gap-2">
+                                                <input type="text" name="installation-time-luneta" class="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-center" placeholder="Ej: 1" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                                                 <span class="text-gray-600">horas</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center text-lg text-gray-700 p-3 border border-gray-200 rounded-lg bg-gray-100 font-semibold">
+                                        <span>Moto</span>
+                                        <span class="text-sm text-gray-500 font-normal">(5,000-15,000 cm²)</span>
+                                    </div>
+                                    <div class="mt-2 px-3 pb-2 space-y-3">
+                                        <div class="flex items-center justify-center gap-2">
+                                            <label for="price-from-moto" class="text-sm text-gray-600">DESDE</label>
+                                            <input type="text" id="price-from-moto" name="price-from-moto" class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" placeholder="$">
+                                            <span class="text-gray-600 font-bold">-</span>
+                                            <label for="price-to-moto" class="text-sm text-gray-600">HASTA</label>
+                                            <input type="text" id="price-to-moto" name="price-to-moto" class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" placeholder="$">
+                                        </div>
+                                        <div>
+                                            <input type="text" name="vinyl-moto" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors placeholder:text-center" placeholder="Tipo de vinilo">
+                                        </div>
+                                        <div class="flex justify-center items-center gap-2">
+                                            <input type="text" name="installation-time-moto" class="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-center" placeholder="Ej: 3" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                                             <span class="text-gray-600">horas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-lg text-gray-700 p-3 border border-gray-200 rounded-lg bg-gray-100 font-semibold">Bici</p>
+                                    <div class="mt-2 px-3 pb-2 space-y-3">
+                                        <div class="flex items-center justify-center gap-2">
+                                            <label for="price-from-bici" class="text-sm text-gray-600">DESDE</label>
+                                            <input type="text" id="price-from-bici" name="price-from-bici" class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" placeholder="$">
+                                            <span class="text-gray-600 font-bold">-</span>
+                                            <label for="price-to-bici" class="text-sm text-gray-600">HASTA</label>
+                                            <input type="text" id="price-to-bici" name="price-to-bici" class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" placeholder="$">
+                                        </div>
+                                        <div>
+                                            <input type="text" name="vinyl-bici" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors placeholder:text-center" placeholder="Tipo de vinilo">
+                                        </div>
+                                        <div class="flex justify-center items-center gap-2">
+                                            <input type="text" name="installation-time-bici" class="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-center" placeholder="Ej: 1" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                                             <span class="text-gray-600">horas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center text-lg text-gray-700 p-3 border border-gray-200 rounded-lg bg-gray-100 font-semibold">
+                                        <span>Mochila de repartidor</span>
+                                        <span class="text-sm text-gray-500 font-normal">(15 x 33 cm)</span>
+                                    </div>
+                                    <div class="mt-2 px-3 pb-2 space-y-3">
+                                        <div class="flex items-center justify-center gap-2">
+                                            <label for="price-from-mochila" class="text-sm text-gray-600">DESDE</label>
+                                            <input type="text" id="price-from-mochila" name="price-from-mochila" class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" placeholder="$">
+                                            <span class="text-gray-600 font-bold">-</span>
+                                            <label for="price-to-mochila" class="text-sm text-gray-600">HASTA</label>
+                                            <input type="text" id="price-to-mochila" name="price-to-mochila" class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" placeholder="$">
+                                        </div>
+                                        <div>
+                                            <input type="text" name="vinyl-mochila" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors placeholder:text-center" placeholder="Tipo de vinilo">
+                                        </div>
+                                        <div class="flex justify-center items-center gap-2">
+                                            <input type="text" name="installation-time-mochila" class="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-center" placeholder="Ej: 0.5" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                                             <span class="text-gray-600">horas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
+                            Guardar Datos de la Gráfica
+                        </button>
+                    </form>
+                    <div id="graph-id-display" class="hidden bg-gray-100 p-4 rounded-lg text-center mt-6 border border-gray-300">
+                        <p class="text-gray-600 font-medium">ID de Gráfica:</p>
+                        <span id="generated-graph-id" class="text-3xl font-bold text-blue-600"></span>
+                    </div>
+                </div>
+            </section>
+    
+            </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <script type="module">
+        // Firebase Imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, addDoc, setDoc, runTransaction, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- Pop-up Modal Elements ---
+        const modalOverlay = document.getElementById('success-modal-overlay');
+        const modalBox = document.getElementById('success-modal-box');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+
+        // --- Helper Function ---
+        const showSuccessModal = (title, message, redirectOnClose = false) => {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            modalOverlay.dataset.redirectOnClose = redirectOnClose;
+            modalOverlay.classList.remove('hidden');
+            setTimeout(() => {
+                modalOverlay.classList.remove('opacity-0');
+                modalBox.classList.remove('opacity-0', 'scale-95');
+            }, 10);
+        };
+        
+        const hideSuccessModal = () => {
+            modalOverlay.classList.add('opacity-0');
+            modalBox.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                modalOverlay.classList.add('hidden');
+            }, 300);
+        };
+        
+        const handleModalClose = () => {
+            const shouldRedirect = modalOverlay.dataset.redirectOnClose === 'true';
+            hideSuccessModal();
+            if (shouldRedirect) {
+                setTimeout(() => {
+                    returnToInitialView();
+                    delete modalOverlay.dataset.redirectOnClose; // Clean up
+                }, 300); 
+            }
+        }
+
+        modalCloseBtn.addEventListener('click', handleModalClose);
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                handleModalClose();
+            }
+        });
+
+
+        const showMessage = (message, isSuccess) => {
+            if(isSuccess) return; // Only use for errors now
+            const messageBox = document.createElement('div');
+            messageBox.textContent = message;
+            messageBox.className = `fixed bottom-5 right-5 p-4 rounded-lg shadow-lg text-white font-medium transition-transform transform z-50 bg-red-500`;
+            document.body.appendChild(messageBox);
+            setTimeout(() => {
+                messageBox.style.transform = 'translateY(200%)';
+                messageBox.addEventListener('transitionend', () => messageBox.remove());
+            }, 5000);
+        };
+
+        // --- Firebase Setup ---
+        const firebaseConfig = {
+          apiKey: "AIzaSyDZkQgLJd_pqk98MEZoMlo-6SFYxJqtbnU",
+          authDomain: "gestor-addly.firebaseapp.com",
+          projectId: "gestor-addly",
+          storageBucket: "gestor-addly.firebasestorage.app",
+          messagingSenderId: "1072574102423",
+          appId: "1:1072574102423:web:958ccd03f7c327a9c862d2",
+          measurementId: "G-1M90X7WGEN"
+        };
+        
+        let app, db, auth;
+        let currentDriverData = null; // To store driver and vehicle data before final save
+        let currentZones = []; // To store circulation zones for the current vehicle
+
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                 try {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } catch (tokenError) {
+                    console.warn("signInWithCustomToken failed, falling back to anonymous sign-in.", tokenError);
+                    await signInAnonymously(auth);
+                }
+            } else {
+                await signInAnonymously(auth);
+            }
+            console.log("Firebase initialized and user signed in.");
+        } catch (error) {
+            console.error("Firebase initialization failed:", error);
+            if (error.code === 'auth/configuration-not-found') {
+                showMessage("Error de Firebase: La autenticación no está configurada. Habilite un proveedor de inicio de sesión (ej: 'Anónimo') en su Consola de Firebase > Authentication > Sign-in method.", false);
+            } else {
+                showMessage("Error al conectar con la base de datos.", false);
+            }
+        }
+
+        // --- DOM Elements ---
+        const initialView = document.getElementById('initial-view');
+        const appContent = document.getElementById('app-content');
+        const backToHomeBtn = document.getElementById('back-to-home');
+        
+        const generatedIdElement = document.getElementById('generated-id');
+        const driverIdDisplay = document.getElementById('driver-id-display');
+        const generatedGraphIdElement = document.getElementById('generated-graph-id');
+        const graphIdDisplay = document.getElementById('graph-id-display');
+
+        const driversSection = document.getElementById('drivers-section');
+        const graphsSection = document.getElementById('graphs-section');
+        const personalDataContainer = document.getElementById('personal-data-container');
+        const vehicleDataContainer = document.getElementById('vehicle-data-container');
+        const vehicleFormTitle = document.getElementById('vehicle-form-title');
+
+        const addVehicleBtn = document.getElementById('add-vehicle-btn');
+        const finishVehiclesBtn = document.getElementById('finish-vehicles-btn');
+        const scrollToFinishBtn = document.getElementById('scroll-to-finish-btn');
+        const addedVehiclesList = document.getElementById('added-vehicles-list');
+
+        const zoneInput = document.getElementById('zone-input');
+        const addZoneBtn = document.getElementById('add-zone-btn');
+        const zonePillsContainer = document.getElementById('zone-pills-container');
+        
+        const vehicleTypeSelect = document.getElementById('vehicle-type');
+        const backpackOptionContainer = document.getElementById('backpack-option-container');
+
+        const brandContainer = document.getElementById('brand-container');
+        const modelContainer = document.getElementById('model-container');
+        const yearContainer = document.getElementById('year-container');
+        const licensePlateContainer = document.getElementById('license-plate-container');
+        const brandInput = document.getElementById('brand');
+        const modelInput = document.getElementById('model');
+        const yearInput = document.getElementById('year');
+        const licensePlateInput = document.getElementById('license-plate');
+
+        const driverEmailInput = document.getElementById('email');
+        const graphEmailInput = document.getElementById('graph-email');
+
+        const sections = {
+            'drivers': driversSection,
+            'graphs': graphsSection
+        };
+
+        // --- City and Province Data ---
+        const provincesAndCities = {
+            "Buenos Aires": ["La Plata (Capital)", "Mar del Plata", "Bahía Blanca", "San Nicolás de los Arroyos", "General Pueyrredón", "Moreno", "Quilmes", "Vicente López", "Tigre", "Lomas de Zamora", "La Matanza", "Pilar", "Berisso", "San Fernando"],
+            "Catamarca": ["San Fernando del Valle de Catamarca (Capital)", "Valle Viejo", "Tinogasta", "Santa María", "Andalgalá", "Belén", "Recreo"],
+            "Chaco": ["Resistencia (Capital)", "Barranqueras", "Charata", "Castelli", "Sáenz Peña", "Villa Ángela", "Las Palmas"],
+            "Chubut": ["Rawson (Capital)", "Comodoro Rivadavia", "Puerto Madryn", "Trelew", "Esquel", "Sarmiento", "Rada Tilly"],
+            "Córdoba": ["Córdoba (Capital)", "Villa Carlos Paz", "Río Cuarto", "Villa María", "Jesús María", "Alta Gracia", "San Francisco"],
+            "Corrientes": ["Corrientes (Capital)", "Goya", "Santo Tomé", "Curuzú Cuatiá", "Paso de los Libres", "Mercedes", "Bella Vista"],
+            "Entre Ríos": ["Paraná (Capital)", "Concordia", "Gualeguaychú", "Concepción del Uruguay", "Federación", "Victoria", "Villaguay"],
+            "Formosa": ["Formosa (Capital)", "Clorinda", "Las Lomitas", "Ingeniero Juárez"],
+            "Jujuy": ["San Salvador de Jujuy (Capital)", "San Pedro de Jujuy", "Libertador General San Martín", "Perico", "Palpalá"],
+            "La Pampa": ["Santa Rosa (Capital)", "General Pico", "Eduardo Castex", "Realicó", "Toay"],
+            "La Rioja": ["La Rioja (Capital)", "Chilecito", "Aimogasta", "Chepes"],
+            "Mendoza": ["Mendoza (Capital)", "San Rafael", "Godoy Cruz", "Maipú", "Las Heras", "Guaymallén", "Luján de Cuyo"],
+            "Misiones": ["Posadas (Capital)", "Eldorado", "Oberá", "Puerto Iguazú", "San Vicente"],
+            "Neuquén": ["Neuquén (Capital)", "Plottier", "Cutral Có", "Centenario", "San Martín de los Andes"],
+            "Río Negro": ["Viedma (Capital)", "General Roca", "San Carlos de Barilochem", "Cipolletti", "Villa Regina", "El Bolsón"],
+            "Salta": ["Salta (Capital)", "San Ramón de la Nueva Orán", "Tartagal", "Metán", "Cafayate", "Rosario de la Frontera"],
+            "San Juan": ["San Juan (Capital)", "Caucete", "Rivadavia", "Chimbas", "San José de Jáchal"],
+            "San Luis": ["San Luis (Capital)", "Villa Mercedes", "Merlo", "La Punta", "Juana Koslay"],
+            "Santa Cruz": ["Río Gallegos (Capital)", "Caleta Olivia", "El Calafate", "Puerto Deseado", "Puerto San Julián"],
+            "Santa Fe": ["Santa Fe (Capital)", "Rosario", "Rafaela", "Venado Tuerto", "Reconquista", "Santo Tomé"],
+            "Santiago del Estero": ["Santiago del Estero (Capital)", "La Banda", "Termas de Río Hondo", "Frías"],
+            "Tierra del Fuego, Antártida e Islas del Atlántico Sur": ["Ushuaia (Capital)", "Río Grande", "Tolhuin"],
+            "Tucumán": ["San Miguel de Tucumán (Capital)", "Yerba Buena", "Concepción", "Tafí Viejo", "Banda del Río Salí"],
+        };
+
+        const provinceCodes = {
+            "Buenos Aires": "PBA", "Catamarca": "CT", "Chaco": "CH", "Chubut": "CHB", "Córdoba": "CD",
+            "Corrientes": "CR", "Entre Ríos": "ER", "Formosa": "FM", "Jujuy": "JJ", "La Pampa": "LP",
+            "La Rioja": "LR", "Mendoza": "MZ", "Misiones": "MN", "Neuquén": "NQ", "Río Negro": "RN",
+            "Salta": "ST", "San Juan": "SJ", "San Luis": "SL", "Santa Cruz": "SC", "Santa Fe": "SF",
+            "Santiago del Estero": "SE", "Tierra del Fuego, Antártida e Islas del Atlántico Sur": "TF", "Tucumán": "TC"
+        };
+
+        const cityAbbreviations = {
+            "La Plata (Capital)": "LPT", "Mar del Plata": "MDP", "Bahía Blanca": "BHI", "San Nicolás de los Arroyos": "SNA",
+            "General Pueyrredón": "GPY", "Moreno": "MRE", "Quilmes": "QLM", "Vicente López": "VLO", "Tigre": "TGR",
+            "Lomas de Zamora": "LZA", "La Matanza": "LMT", "Pilar": "PLR", "Berisso": "BSS", "San Fernando": "SFD",
+            "San Fernando del Valle de Catamarca (Capital)": "SFC", "Valle Viejo": "VVI", "Tinogasta": "TIN", "Santa María": "SMA",
+            "Andalgalá": "AND", "Belén": "BLN", "Recreo": "RCR", "Resistencia (Capital)": "RES", "Barranqueras": "BQS",
+            "Charata": "CHT", "Castelli": "CAS", "Sáenz Peña": "SPE", "Villa Ángela": "VAN", "Las Palmas": "LPA",
+            "Rawson (Capital)": "RWS", "Comodoro Rivadavia": "CRV", "Puerto Madryn": "PMY", "Trelew": "TRW", "Esquel": "EQS",
+            "Sarmiento": "SAR", "Rada Tilly": "RTY", "Córdoba (Capital)": "CBA", "Villa Carlos Paz": "VCP", "Río Cuarto": "RCO",
+            "Villa María": "VMA", "Jesús María": "JMA", "Alta Gracia": "AGR", "San Francisco": "SFO", "Corrientes (Capital)": "CRR",
+            "Goya": "GOY", "Santo Tomé": "STE", "Curuzú Cuatiá": "CCU", "Paso de los Libres": "PLL", "Mercedes": "MCE",
+            "Bella Vista": "BVS", "Paraná (Capital)": "PRA", "Concordia": "CON", "Gualeguaychú": "GUY", "Concepción del Uruguay": "CDU",
+            "Federación": "FDR", "Victoria": "VTO", "Villaguay": "VGY", "Formosa (Capital)": "FMA", "Clorinda": "CLO",
+            "Las Lomitas": "LLM", "Ingeniero Juárez": "IJU", "San Salvador de Jujuy (Capital)": "SSJ", "San Pedro de Jujuy": "SPJ",
+            "Libertador General San Martín": "LGS", "Perico": "PRC", "Palpalá": "PPA", "Santa Rosa (Capital)": "RSA", "General Pico": "GPI",
+            "Eduardo Castex": "ECX", "Realicó": "RLC", "Toay": "TOY", "La Rioja (Capital)": "IRJ", "Chilecito": "CHT",
+            "Aimogasta": "AMG", "Chepes": "CPE", "Mendoza (Capital)": "MDZ", "San Rafael": "SRA", "Godoy Cruz": "GCR",
+            "Maipú": "MPI", "Las Heras": "LHR", "Guaymallén": "GYM", "Luján de Cuyo": "LCN", "Posadas (Capital)": "POS",
+            "Eldorado": "ELD", "Oberá": "OBR", "Puerto Iguazú": "IGR", "San Vicente": "SVT", "Neuquén (Capital)": "NQN",
+            "Plottier": "PLT", "Cutral Có": "CCO", "Centenario": "CEN", "San Martín de los Andes": "SMA", "Viedma (Capital)": "VDM",
+            "General Roca": "GRC", "San Carlos de Bariloche": "BRC", "Cipolletti": "CPL", "Villa Regina": "VRE", "El Bolsón": "EBO",
+            "Salta (Capital)": "SLA", "San Ramón de la Nueva Orán": "SRO", "Tartagal": "TAR", "Metán": "MTN", "Cafayate": "CFY",
+            "Rosario de la Frontera": "RFR", "San Juan (Capital)": "SJN", "Caucete": "CAU", "Rivadavia": "RVA", "Chimbas": "CHB",
+            "San José de Jáchal": "SJH", "San Luis (Capital)": "SLS", "Villa Mercedes": "VME", "Merlo": "MRL", "La Punta": "LPT",
+            "Juana Koslay": "JKO", "Río Gallegos (Capital)": "RGL", "Caleta Olivia": "CLV", "El Calafate": "FTE",
+            "Puerto Deseado": "PDS", "Puerto San Julián": "PSJ", "Santa Fe (Capital)": "SFN", "Rosario": "ROS", "Rafaela": "RAF",
+            "Venado Tuerto": "VTU", "Reconquista": "RTA", "Santo Tomé": "STF", "Santiago del Estero (Capital)": "SDE",
+            "La Banda": "LBD", "Termas de Río Hondo": "TRH", "Frías": "FRI", "Ushuaia (Capital)": "USH", "Río Grande": "RGA",
+            "Tolhuin": "THU", "San Miguel de Tucumán (Capital)": "TUC", "Yerba Buena": "YBU", "Concepción": "CCN",
+            "Tafí Viejo": "TFV", "Banda del Río Salí": "BRS"
+        };
+
+
+        // --- Helper Functions ---
+
+        const getProvinceCode = (provinceName) => provinceCodes[provinceName] || 'XX';
+        const getCityAbbreviation = (cityName) => cityAbbreviations[cityName] || 'XXX';
+
+        const toBase64 = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+
+        const getNextId = async (category, code) => {
+            if (!db) return null;
+            const countersRef = doc(db, 'metadata_gestion_negocios', 'counters');
+            const fieldKey = `${category}_${code}`;
+            
+            try {
+                const newCount = await runTransaction(db, async (transaction) => {
+                    const countersDoc = await transaction.get(countersRef);
+                    if (!countersDoc.exists()) {
+                        transaction.set(countersRef, { [fieldKey]: 1 });
+                        return 1;
+                    }
+                    const currentCount = countersDoc.data()[fieldKey] || 0;
+                    const nextCount = currentCount + 1;
+                    transaction.update(countersRef, { [fieldKey]: nextCount });
+                    return nextCount;
+                });
+                return newCount;
+            } catch (e) {
+                console.error("Transaction failed: ", e);
+                throw new Error("No se pudo generar el ID.");
+            }
+        };
+
+        const updateLocalities = (provinceSelectId, citySelectId) => {
+            const provinceSelect = document.getElementById(provinceSelectId);
+            const citySelect = document.getElementById(citySelectId);
+            if (!provinceSelect || !citySelect) return;
+            provinceSelect.addEventListener('change', () => {
+                const selectedProvince = provinceSelect.value;
+                citySelect.innerHTML = '<option value="">Seleccione una localidad</option>';
+                if (selectedProvince && provincesAndCities[selectedProvince]) {
+                    provincesAndCities[selectedProvince].forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = city;
+                        option.textContent = city;
+                        citySelect.appendChild(option);
+                    });
+                }
+            });
+        };
+
+        const handleInvalidForm = (form) => {
+            const firstInvalidField = form.querySelector(':invalid');
+            if (firstInvalidField) {
+                firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                firstInvalidField.focus({ preventScroll: true });
+                firstInvalidField.classList.add('invalid-field');
+                
+                const removeErrorStyle = () => {
+                    firstInvalidField.classList.remove('invalid-field');
+                    firstInvalidField.removeEventListener('input', removeErrorStyle);
+                    firstInvalidField.removeEventListener('change', removeErrorStyle);
+                };
+
+                firstInvalidField.addEventListener('input', removeErrorStyle);
+                firstInvalidField.addEventListener('change', removeErrorStyle);
+            }
+            showMessage('Por favor, complete todos los campos obligatorios.', false);
+        };
+
+        const validateEmailOnInput = (inputElement) => {
+            inputElement.addEventListener('input', () => {
+                // Check validity only after the user has typed something
+                if (inputElement.value.length > 0) {
+                    if (inputElement.checkValidity()) {
+                        inputElement.classList.remove('invalid-field');
+                    } else {
+                        inputElement.classList.add('invalid-field');
+                    }
+                } else {
+                    // If the user clears the field, remove the error style
+                    // The 'required' validation will be caught on submit
+                    inputElement.classList.remove('invalid-field');
+                }
+            });
+        };
+
+        const formatPriceInput = (input) => {
+            let value = input.value.replace(/[^0-9]/g, '');
+            if (value) {
+                input.value = '$' + value;
+            } else {
+                input.value = '';
+            }
+        };
+
+        const enableEnterNavigation = (form) => {
+            const focusableElements = Array.from(form.querySelectorAll('input:not(#zone-input), select, button[type="submit"]'));
+            focusableElements.forEach((element, index) => {
+                element.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && element.tagName !== 'BUTTON') {
+                        e.preventDefault();
+                        const nextElement = focusableElements[index + 1];
+                        if (nextElement) {
+                            nextElement.focus();
+                        } else {
+                            const submitButton = form.querySelector('button[type="submit"], #add-vehicle-btn');
+                            if (submitButton) {
+                                submitButton.click();
+                            }
+                        }
+                    }
+                });
+            });
+             zoneInput.addEventListener('keydown', (e) => {
+                if(e.key === 'Enter') {
+                    e.preventDefault();
+                    addZoneBtn.click();
+                }
+            });
+        };
+        
+        const resetDriverForm = () => {
+             personalDataContainer.classList.remove('hidden');
+             vehicleDataContainer.classList.add('hidden');
+             document.getElementById('personal-data-form').reset();
+             document.getElementById('vehicle-data-form').reset();
+             backpackOptionContainer.classList.add('hidden');
+             driverIdDisplay.classList.add('hidden');
+             scrollToFinishBtn.classList.add('hidden');
+             vehicleFormTitle.textContent = '2. Tu Vehículo: El Motor de tus Ganancias';
+             addedVehiclesList.innerHTML = '';
+             currentDriverData = null;
+             currentZones = [];
+             renderZones();
+        }
+
+        const resetAllForms = () => {
+            resetDriverForm();
+            const graphsForm = document.getElementById('graphs-form');
+            graphsForm.reset();
+            graphIdDisplay.classList.add('hidden');
+            // Also reset the hours interface
+            const hoursContainer = document.getElementById('operating-hours-container');
+            hoursContainer.querySelectorAll('.day-toggle').forEach(toggle => {
+                if(toggle.checked) {
+                    toggle.checked = false;
+                    // Manually dispatch change event to hide time inputs
+                    toggle.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            });
+        };
+
+        // --- Navigation ---
+        const switchSection = (activeSectionId) => {
+            initialView.style.display = 'none';
+            appContent.style.display = 'block';
+            Object.values(sections).forEach(section => section.classList.remove('active'));
+            if(sections[activeSectionId]) {
+                 sections[activeSectionId].classList.add('active');
+            }
+            window.scrollTo(0, 0);
+        };
+
+        const returnToInitialView = () => {
+            appContent.style.display = 'none';
+            initialView.style.display = 'block';
+            Object.values(sections).forEach(section => section.classList.remove('active'));
+            resetAllForms();
+        };
+
+        // --- Zone Pill Logic ---
+        const renderZones = () => {
+            zonePillsContainer.innerHTML = '';
+            currentZones.forEach(zone => {
+                const pill = document.createElement('span');
+                pill.className = 'bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-1 rounded-full flex items-center';
+                pill.textContent = zone;
+
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.className = 'ms-2 text-blue-600 hover:text-blue-800';
+                removeBtn.innerHTML = '&times;';
+                removeBtn.onclick = () => {
+                    currentZones = currentZones.filter(z => z !== zone);
+                    renderZones();
+                };
+                
+                pill.appendChild(removeBtn);
+                zonePillsContainer.appendChild(pill);
+            });
+
+            if (currentZones.length >= 5) {
+                zoneInput.disabled = true;
+                zoneInput.placeholder = "Máximo de 5 zonas alcanzado";
+                addZoneBtn.classList.add('hidden');
+            } else {
+                zoneInput.disabled = false;
+                zoneInput.placeholder = "Ej: Centro, Nueva Córdoba, Ruta 9. (Máximo impacto)";
+            }
+        };
+
+        addZoneBtn.addEventListener('click', () => {
+            if (currentZones.length >= 5) {
+                showMessage('Puede agregar un máximo de 5 zonas.', false);
+                return;
+            }
+            const zoneValue = zoneInput.value.trim();
+            if (zoneValue && !currentZones.includes(zoneValue)) {
+                currentZones.push(zoneValue);
+                renderZones();
+                zoneInput.value = '';
+                addZoneBtn.classList.add('hidden');
+                zoneInput.focus();
+            }
+        });
+
+        zoneInput.addEventListener('input', () => {
+            if (zoneInput.value.trim().length > 0) {
+                addZoneBtn.classList.remove('hidden');
+            } else {
+                addZoneBtn.classList.add('hidden');
+            }
+        });
+
+        // --- Operating Hours Logic ---
+        const setupOperatingHours = () => {
+            const container = document.getElementById('operating-hours-container');
+            const applyAllCheckbox = document.getElementById('apply-all-hours');
+            const days = [
+                { id: 'lunes', name: 'Lunes' },
+                { id: 'martes', name: 'Martes' },
+                { id: 'miercoles', name: 'Miércoles' },
+                { id: 'jueves', name: 'Jueves' },
+                { id: 'viernes', name: 'Viernes' },
+                { id: 'sabado', name: 'Sábado' },
+                { id: 'domingo', name: 'Domingo' },
+            ];
+
+            container.innerHTML = days.map(day => `
+                <div class="day-schedule">
+                    <div class="flex items-center justify-between">
+                        <label for="day-${day.id}" class="font-medium text-gray-800 select-none cursor-pointer">${day.name}</label>
+                        <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                            <input type="checkbox" name="day-${day.id}" id="day-${day.id}" class="day-toggle toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                            <label for="day-${day.id}" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                        </div>
+                    </div>
+                    <div id="time-${day.id}" class="time-inputs hidden mt-3 flex items-center justify-center gap-4 pl-4">
+                        <input type="time" name="time-from-${day.id}" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-center">
+                        <span class="font-bold text-gray-500">-</span>
+                        <input type="time" name="time-to-${day.id}" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-center">
+                    </div>
+                </div>
+            `).join('');
+            
+            container.addEventListener('change', (event) => {
+                if (event.target.classList.contains('day-toggle')) {
+                    const day = event.target.id.split('-')[1];
+                    const timeInputsDiv = document.getElementById(`time-${day}`);
+                    const timeInputs = timeInputsDiv.querySelectorAll('input[type="time"]');
+
+                    if (event.target.checked) {
+                        timeInputsDiv.classList.remove('hidden');
+                        timeInputs.forEach(input => input.required = true);
+                    } else {
+                        timeInputsDiv.classList.add('hidden');
+                        timeInputs.forEach(input => {
+                            input.required = false;
+                            input.value = '';
+                        });
+                    }
+                }
+            });
+            
+             // Corrected Logic: Trigger on checkbox click
+            applyAllCheckbox.addEventListener('change', () => {
+                if (!applyAllCheckbox.checked) return;
+
+                let sourceFromValue = '';
+                let sourceToValue = '';
+
+                // Find the first selected day to use as a source
+                const firstSelectedToggle = container.querySelector('.day-toggle:checked');
+                if (firstSelectedToggle) {
+                    const sourceDayId = firstSelectedToggle.id.split('-')[1];
+                    sourceFromValue = container.querySelector(`input[name="time-from-${sourceDayId}"]`).value;
+                    sourceToValue = container.querySelector(`input[name="time-to-${sourceDayId}"]`).value;
+                }
+                
+                // If no source values, do nothing
+                if (!sourceFromValue || !sourceToValue) {
+                    showMessage("Por favor, ingrese un horario en al menos un día antes de aplicar a todos.", false);
+                    applyAllCheckbox.checked = false; // uncheck it
+                    return;
+                }
+
+                // Apply to all other *checked* days
+                container.querySelectorAll('.day-toggle:checked').forEach(toggle => {
+                    const targetDayId = toggle.id.split('-')[1];
+                    container.querySelector(`input[name="time-from-${targetDayId}"]`).value = sourceFromValue;
+                    container.querySelector(`input[name="time-to-${targetDayId}"]`).value = sourceToValue;
+                });
+            });
+        };
+
+
+        // --- Event Listeners & Initializations ---
+        const driversBtns = [
+            document.getElementById('show-drivers-cta'),
+            document.getElementById('register-driver-nav'),
+            document.getElementById('register-driver-nav-mobile'),
+            document.getElementById('footer-register-driver')
+        ];
+        const graphsBtns = [
+            document.getElementById('show-graphs-cta'),
+            document.getElementById('register-graph-nav'),
+            document.getElementById('register-graph-nav-mobile'),
+            document.getElementById('footer-register-graph')
+        ];
+
+        driversBtns.forEach(btn => btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchSection('drivers');
+        }));
+
+        graphsBtns.forEach(btn => btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchSection('graphs');
+        }));
+        
+        backToHomeBtn.addEventListener('click', returnToInitialView);
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        updateLocalities('province', 'personal-city');
+        updateLocalities('graphs-province', 'graph-location');
+        updateLocalities('vehicle-province', 'vehicle-city');
+
+        validateEmailOnInput(driverEmailInput);
+        validateEmailOnInput(graphEmailInput);
+        
+        setupOperatingHours();
+
+        vehicleTypeSelect.addEventListener('change', () => {
+            const selectedType = vehicleTypeSelect.value;
+            // Handle backpack option
+            if (selectedType === 'MOTO' || selectedType === 'BICI') {
+                backpackOptionContainer.classList.remove('hidden');
+            } else {
+                backpackOptionContainer.classList.add('hidden');
+                document.getElementById('wants-backpack').checked = false;
+            }
+
+            // Handle BICI specific fields
+            const isBici = selectedType === 'BICI';
+            const fieldsToToggle = [
+                { container: brandContainer, input: brandInput },
+                { container: modelContainer, input: modelInput },
+                { container: yearContainer, input: yearInput },
+                { container: licensePlateContainer, input: licensePlateInput }
+            ];
+
+            fieldsToToggle.forEach(({ container, input }) => {
+                if (isBici) {
+                    container.classList.add('hidden');
+                    input.required = false;
+                } else {
+                    container.classList.remove('hidden');
+                    input.required = true;
+                }
+            });
+        });
+        
+        const priceInputs = document.querySelectorAll('input[id^="price-"]');
+        priceInputs.forEach(input => {
+            input.addEventListener('input', (e) => formatPriceInput(e.target));
+        });
+
+        // Enable smart navigation for all forms
+        enableEnterNavigation(document.getElementById('personal-data-form'));
+        enableEnterNavigation(document.getElementById('vehicle-data-form'));
+        enableEnterNavigation(document.getElementById('graphs-form'));
+        
+        scrollToFinishBtn.addEventListener('click', () => {
+            finishVehiclesBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Add highlight class
+            finishVehiclesBtn.classList.add('highlight-finish-btn');
+            
+            // Remove highlight after animation ends
+            setTimeout(() => {
+                finishVehiclesBtn.classList.remove('highlight-finish-btn');
+            }, 2500); 
+        });
+
+        // --- Shared Function to add a vehicle ---
+        const addCurrentVehicle = async () => {
+            const vehicleForm = document.getElementById('vehicle-data-form');
+            if (!vehicleForm.checkValidity()) {
+                // Clear any leftover indicator messages on validation failure
+                document.getElementById('image-upload-indicator').classList.add('hidden');
+                handleInvalidForm(vehicleForm);
+                return false; // Indicate failure
+            }
+            if (currentZones.length < 3) {
+                showMessage('Debe agregar un mínimo de 3 Zonas de Circulación.', false);
+                zoneInput.classList.add('invalid-field');
+                zoneInput.focus();
+                return false; // Indicate failure
+            }
+            
+            const imageFile = vehicleForm.querySelector('#image').files[0];
+            const imageIndicator = document.getElementById('image-upload-indicator');
+
+            const vehicleData = {
+                type: vehicleForm.querySelector('#vehicle-type').value,
+                wants_backpack: vehicleForm.querySelector('#wants-backpack').checked,
+                brand: vehicleForm.querySelector('#brand').value || null,
+                model: vehicleForm.querySelector('#model').value || null,
+                year: vehicleForm.querySelector('#year').value || null,
+                licence_plate: vehicleForm.querySelector('#license-plate').value || null,
+                color: vehicleForm.querySelector('#color').value,
+                vehicle_province: vehicleForm.querySelector('#vehicle-province').value,
+                vehicle_city: vehicleForm.querySelector('#vehicle-city').value,
+                address_street: vehicleForm.querySelector('#address-street-vehicle').value,
+                address_number: vehicleForm.querySelector('#address-number-vehicle').value,
+                circulation_zones: currentZones,
+                image_url: null
+            };
+            
+            if (imageFile) {
+                try {
+                    imageIndicator.textContent = 'Procesando...';
+                    imageIndicator.classList.remove('hidden');
+                    addVehicleBtn.disabled = true;
+                    finishVehiclesBtn.disabled = true;
+
+                    // Process to give user feedback, but we won't store the result.
+                    await toBase64(imageFile); 
+
+                    imageIndicator.textContent = 'Imagen cargada';
+                    // The image data is intentionally discarded and vehicleData.image_url remains null.
+                } catch (error) {
+                    console.error("Error converting image to Base64:", error);
+                    showMessage("Hubo un error al procesar la imagen.", false);
+                    imageIndicator.textContent = 'Error al cargar';
+                    return false; // Indicate failure
+                } finally {
+                    addVehicleBtn.disabled = false;
+                    finishVehiclesBtn.disabled = false;
+                }
+            }
+            
+            const cityAbbreviation = getCityAbbreviation(vehicleData.vehicle_city);
+            const provinceCode = getProvinceCode(vehicleData.vehicle_province);
+            try {
+                const vehicleNumber = await getNextId('vehicle', 'GLOBAL');
+                const generatedVehicleId = `VE - ${provinceCode} - ${cityAbbreviation} - ${vehicleNumber.toString().padStart(2, '0')}`;
+
+                vehicleData.vehicle_id = generatedVehicleId;
+                currentDriverData.vehicles.push(vehicleData);
+                return true; // Indicate success
+            } catch(error) {
+                showMessage(error.message, false);
+                return false; // Indicate failure
+            }
+        };
+
+
+        // --- Form Handling ---
+        
+        // DRIVERS - Step 1: Personal Data
+        document.getElementById('personal-data-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const form = event.target;
+            if (!form.checkValidity()) {
+                handleInvalidForm(form);
+                return;
+            }
+
+            const submitButton = form.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Generando ID...';
+
+            const formData = new FormData(form);
+            const personalData = Object.fromEntries(formData.entries());
+            const cityAbbreviation = getCityAbbreviation(personalData['personal-city']);
+            const provinceCode = getProvinceCode(personalData['province']);
+
+            try {
+                const driverNumber = await getNextId('driver', cityAbbreviation);
+                const generatedId = `CH - ${provinceCode} - ${cityAbbreviation} - ${driverNumber.toString().padStart(2, '0')}`;
+                
+                currentDriverData = {
+                    driverId: generatedId,
+                    createdAt: new Date().toISOString(),
+                    personalInfo: {
+                        fullName: personalData['full-name'],
+                        province: personalData['province'],
+                        city: personalData['personal-city'],
+                        phone: personalData['phone'],
+                        email: personalData['email']
+                    },
+                    vehicles: []
+                };
+
+                generatedIdElement.textContent = generatedId;
+                driverIdDisplay.classList.remove('hidden');
+                personalDataContainer.classList.add('hidden');
+                vehicleDataContainer.classList.remove('hidden');
+                vehicleFormTitle.textContent = `2. Tu Vehículo: El Motor de tus Ganancias`;
+                addedVehiclesList.innerHTML = '';
+
+            } catch (error) {
+                console.error(error);
+                showMessage(error.message, false);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Guardar y Continuar';
+            }
+        });
+
+        // DRIVERS - Step 2: Add Vehicle (locally)
+        addVehicleBtn.addEventListener('click', async (event) => {
+            event.preventDefault();
+            const success = await addCurrentVehicle();
+
+            if (success) {
+                const vehicleForm = document.getElementById('vehicle-data-form');
+                const addedVehicle = currentDriverData.vehicles[currentDriverData.vehicles.length - 1];
+
+                if (currentDriverData.vehicles.length === 1) {
+                    const titleElement = document.createElement('h4');
+                    titleElement.className = 'text-xl font-semibold text-gray-700 mb-4';
+                    titleElement.textContent = 'Tu Flota Activa';
+                    addedVehiclesList.appendChild(titleElement);
+                }
+
+                const vehicleItem = document.createElement('div');
+                vehicleItem.className = 'bg-gray-100 p-4 rounded-lg shadow-sm mb-4 border border-gray-300';
+                
+                let vehicleDetails = `
+                    <p class="font-bold text-gray-800">ID del Vehículo: <span class="text-blue-600">${addedVehicle.vehicle_id}</span></p>
+                    <p class="text-gray-600">Tipo: ${addedVehicle.type}</p>`;
+                
+                if (addedVehicle.licence_plate) {
+                    vehicleDetails += `<p class="text-gray-600">Patente: ${addedVehicle.licence_plate}</p>`;
+                }
+                
+                vehicleItem.innerHTML = vehicleDetails;
+                addedVehiclesList.appendChild(vehicleItem);
+                
+                vehicleForm.reset();
+                backpackOptionContainer.classList.add('hidden');
+                currentZones = [];
+                renderZones();
+                vehicleFormTitle.textContent = `2. Tu Vehículo: El Motor de tus Ganancias (${currentDriverData.vehicles.length + 1})`;
+                scrollToFinishBtn.classList.remove('hidden');
+                driversSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+        
+        const saveAllVehiclesToDB = async () => {
+            try {
+                // Map the collected vehicle data to the new nested structure
+                const mappedVehicles = currentDriverData.vehicles.map(vehicle => ({
+                    vehicleId: vehicle.vehicle_id,
+                    type: vehicle.type,
+                    details: {
+                        brand: vehicle.brand,
+                        model: vehicle.model,
+                        year: vehicle.year,
+                        color: vehicle.color,
+                        licensePlate: vehicle.licence_plate
+                    },
+                    location: {
+                        address: `${vehicle.address_street} ${vehicle.address_number}`.trim(),
+                        city: vehicle.vehicle_city,
+                        province: vehicle.vehicle_province
+                    },
+                    extras: {
+                        circulationZones: vehicle.circulation_zones,
+                        wantsBackpack: vehicle.wants_backpack
+                    },
+                    imageUrl: null // Explicitly set to null as requested
+                }));
+
+                // Assemble the final driver object with the new structure
+                const finalDriverData = {
+                    driverId: currentDriverData.driverId,
+                    createdAt: currentDriverData.createdAt,
+                    personalInfo: {
+                        fullName: currentDriverData.personalInfo.fullName,
+                        phone: currentDriverData.personalInfo.phone,
+                        email: currentDriverData.personalInfo.email,
+                        city: currentDriverData.personalInfo.city,
+                        province: currentDriverData.personalInfo.province
+                    },
+                    vehicles: mappedVehicles
+                };
+
+                // Save the single driver document using the driverId as the document ID
+                const driverDocRef = doc(db, 'conductores_gestion_negocios', currentDriverData.driverId);
+                await setDoc(driverDocRef, finalDriverData);
+
+                return true;
+            } catch (error) {
+                console.error("¡ERROR DETECTADO! No se pudo guardar el driver en Firestore:", error);
+                showMessage('Error al guardar los datos en la base de datos. Revise la consola para más detalles.', false);
+                return false;
+            }
+        };
+
+
+        // DRIVERS - Step 3: Finish and Save All to DB
+        finishVehiclesBtn.addEventListener('click', async (event) => {
+            event.preventDefault();
+            
+            const vehicleForm = document.getElementById('vehicle-data-form');
+            // More robust check for unsaved data. This prevents validation errors on a blank form.
+            const hasSubstantialUnsavedData = ['brand', 'model', 'license-plate', 'color'].some(id => 
+                vehicleForm.querySelector(`#${id}`) && vehicleForm.querySelector(`#${id}`).value.trim() !== ''
+            );
+            
+            // If there is substantial data in the form, try to add it as a new vehicle first.
+            if (hasSubstantialUnsavedData) {
+                 const vehicleAdded = await addCurrentVehicle();
+                 // If adding the current vehicle fails (e.g., validation error), stop the process.
+                 if(!vehicleAdded) return; 
+            }
+
+            if (!currentDriverData || currentDriverData.vehicles.length === 0) {
+                showMessage('Debe agregar al menos un vehículo antes de finalizar.', false);
+                return;
+            }
+
+            finishVehiclesBtn.disabled = true;
+            finishVehiclesBtn.textContent = 'Guardando...';
+
+            const success = await saveAllVehiclesToDB();
+            
+            if (success) {
+                showSuccessModal(
+                    '¡Registro Recibido con Éxito!',
+                    `Hemos recibido los detalles de tu registro con ${currentDriverData.vehicles.length} vehículo(s). Nuestro equipo se pondrá en contacto a la brevedad.`,
+                    true
+                );
+            }
+            
+            finishVehiclesBtn.disabled = false;
+            finishVehiclesBtn.textContent = '¡Listo! Empezar a Recibir Ofertas';
+        });
+
+        // GRAPHS Form
+        document.getElementById('graphs-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const form = event.target;
+            
+            const operatingHours = {};
+            const days = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
+            let atLeastOneDaySelected = false;
+
+            days.forEach(day => {
+                const checkbox = form.querySelector(`#day-${day}`);
+                if (checkbox && checkbox.checked) {
+                    atLeastOneDaySelected = true;
+                    const from = form.querySelector(`input[name="time-from-${day}"]`).value;
+                    const to = form.querySelector(`input[name="time-to-${day}"]`).value;
+                    if(from && to){
+                        operatingHours[day] = { from, to };
+                    }
+                }
+            });
+            
+            // Re-check validity AFTER collecting hours, as they might be required now
+            if (!form.checkValidity()) {
+                handleInvalidForm(form);
+                return;
+            }
+
+            if (!atLeastOneDaySelected) {
+                showMessage('Debe seleccionar al menos un día de atención y completar su horario.', false);
+                const hoursContainer = document.getElementById('operating-hours-container');
+                hoursContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                hoursContainer.classList.add('invalid-field');
+                setTimeout(() => hoursContainer.classList.remove('invalid-field'), 2000);
+                return;
+            }
+
+            const submitButton = form.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Guardando...';
+
+            const formData = new FormData(form);
+            const rawData = Object.fromEntries(formData.entries());
+
+            const pricingData = {
+                auto: {
+                    completo: { from: rawData['price-from-auto-completo'].replace(/[^0-9]/g, ''), to: rawData['price-to-auto-completo'].replace(/[^0-9]/g, ''), vinyl: rawData['vinyl-auto-completo'], time: rawData['installation-time-auto-completo'] },
+                    capot: { from: rawData['price-from-capot'].replace(/[^0-9]/g, ''), to: rawData['price-to-capot'].replace(/[^0-9]/g, ''), vinyl: rawData['vinyl-capot'], time: rawData['installation-time-capot'] },
+                    puertas: { from: rawData['price-from-puertas'].replace(/[^0-9]/g, ''), to: rawData['price-to-puertas'].replace(/[^0-9]/g, ''), vinyl: rawData['vinyl-puertas'], time: rawData['installation-time-puertas'] },
+                    baul: { from: rawData['price-from-baul'].replace(/[^0-9]/g, ''), to: rawData['price-to-baul'].replace(/[^0-9]/g, ''), vinyl: rawData['vinyl-baul'], time: rawData['installation-time-baul'] },
+                    luneta: { from: rawData['price-from-luneta'].replace(/[^0-9]/g, ''), to: rawData['price-to-luneta'].replace(/[^0-9]/g, ''), vinyl: rawData['vinyl-luneta'], time: rawData['installation-time-luneta'] }
+                },
+                moto: { from: rawData['price-from-moto'].replace(/[^0-9]/g, ''), to: rawData['price-to-moto'].replace(/[^0-9]/g, ''), vinyl: rawData['vinyl-moto'], time: rawData['installation-time-moto'] },
+                bici: { from: rawData['price-from-bici'].replace(/[^0-9]/g, ''), to: rawData['price-to-bici'].replace(/[^0-9]/g, ''), vinyl: rawData['vinyl-bici'], time: rawData['installation-time-bici'] },
+                mochila: { from: rawData['price-from-mochila'].replace(/[^0-9]/g, ''), to: rawData['price-to-mochila'].replace(/[^0-9]/g, ''), vinyl: rawData['vinyl-mochila'], time: rawData['installation-time-mochila'] }
+            };
+            
+            const cityAbbreviation = getCityAbbreviation(rawData['graph-location']);
+            const provinceCode = getProvinceCode(rawData['graphs-province']);
+
+            try {
+                const graphNumber = await getNextId('graph', cityAbbreviation);
+                const generatedId = `GF - ${provinceCode} - ${cityAbbreviation} - ${graphNumber.toString().padStart(2, '0')}`;
+                
+                const finalGraphData = {
+                    id: generatedId,
+                    createdAt: new Date().toISOString(),
+                    name: rawData['graph-name'],
+                    main_contact: rawData['manager-name'],
+                    contactInfo: {
+                        phone: rawData['graph-phone'],
+                        email: rawData['graph-email']
+                    },
+                    logistics: {
+                        address: {
+                            address_street: rawData['graph-address-street'],
+                            address_number: rawData['graph-address-number'],
+                            city: rawData['graph-location'],
+                            province: rawData['graphs-province']
+                        },
+                        operating_hours: operatingHours
+                    },
+                    operationInfo: {
+                        weekly_capacity: Number(rawData['weekly-capacity']) || 0,
+                        service_commitment: rawData['service-commitment'] === 'on'
+                    },
+                    pricing: pricingData
+                };
+
+                const graphRef = doc(db, 'graficas_gestion_negocios', generatedId);
+                await setDoc(graphRef, finalGraphData);
+
+                showSuccessModal(
+                    '¡Gráfica Guardada!',
+                    `Los datos de "${finalGraphData.name}" se han guardado correctamente con el ID: ${finalGraphData.id}`,
+                    true
+                );
+            } catch (error) {
+                console.error("Error saving graph:", error);
+                showMessage(error.message, false);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Guardar Datos de la Gráfica';
+            }
+        });
+        
+        // --- Logic to update vehicle form title when adding more than one vehicle ---
+        const originalVehicleTitle = "2. Tu Vehículo: El Motor de tus Ganancias";
+        addVehicleBtn.addEventListener('click', () => {
+             if (currentDriverData && currentDriverData.vehicles.length > 0) {
+                 const newTitle = `${originalVehicleTitle} (${currentDriverData.vehicles.length + 1})`;
+                 vehicleFormTitle.textContent = newTitle;
+             } else {
+                 vehicleFormTitle.textContent = originalVehicleTitle;
+             }
+        });
+        
+         document.getElementById('personal-data-form').addEventListener('submit', () => {
+            vehicleFormTitle.textContent = originalVehicleTitle;
+         });
+    </script>
+</body>
+</html>
+
+
+
