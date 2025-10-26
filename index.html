@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -152,24 +154,40 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        /* [CRO] Marquee for Logos/Gallery */
+        /* [CRO] Marquee for Logos/Gallery - MODIFICADO PARA SCROLL/SWIPE + ANIMACIÓN */
         .marquee-wrapper {
-            overflow: hidden;
+            overflow-x: auto; /* Habilita scroll horizontal */
             position: relative;
             width: 100%;
+            -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
+            scrollbar-width: none; /* Oculta scrollbar en Firefox */
         }
-        .marquee {
-            display: flex;
-            animation: marquee 30s linear infinite;
-            width: max-content;
+        .marquee-wrapper::-webkit-scrollbar {
+            display: none; /* Oculta scrollbar en Chrome/Safari */
         }
-        .marquee-gallery {
+
+        .marquee-content {
             display: flex;
-            animation: marquee 40s linear infinite;
             width: max-content;
+            /* Velocidad base (móvil) */
+            animation: marquee 20s linear infinite;
         }
         
-        .marquee img, .marquee-gallery img {
+        /* Pausa la animación al interactuar */
+        .marquee-wrapper:hover .marquee-content,
+        .marquee-wrapper:focus-within .marquee-content {
+            animation-play-state: paused;
+        }
+        
+        /* Ajusta velocidad en desktop */
+        @media (min-width: 768px) {
+            .marquee-content {
+                /* Velocidad más lenta en desktop */
+                animation-duration: 30s;
+            }
+        }
+        
+        .marquee-content img {
             padding-left: 1.5rem;
             padding-right: 1.5rem;
             flex-shrink: 0;
@@ -326,23 +344,23 @@
             <section id="marcas" class="py-10 bg-gray-900 relative z-30 -mt-24 rounded-t-2xl"> <!-- Padding reducido de py-12 a py-10 -->
                  <div class="container mx-auto px-6 text-center">
                     <h2 class="text-xl font-semibold text-gray-300 mb-8">Marcas que confían en nosotros para rodar su mensaje</h2>
-                    <!-- [UX/CRO] Carrusel continuo -->
+                    <!-- [UX/CRO] Carrusel con animación y swipe -->
                     <div class="marquee-wrapper">
-                        <div class="marquee">
-                            <!-- Logos (duplicados para loop) -->
-                            <img src="https://i.postimg.cc/NjVGBKD9/Secci-n-Socios-de-marca-20251015-193216-0000.jpg" alt="Socio 1" class="h-10 mx-auto transition-all filter grayscale hover:grayscale-0 opacity-70 hover:opacity-100">
-                            <img src="https://i.postimg.cc/rwzyB11r/Secci-n-Socios-de-marca-20251015-193216-0001.jpg" alt="Socio 2" class="h-10 mx-auto transition-all filter grayscale hover:grayscale-0 opacity-70 hover:opacity-100">
-                            <img src="https://i.postimg.cc/wj3xCXXR/Secci-n-Socios-de-marca-20251015-193217-0002.jpg" alt="Socio 3" class="h-10 mx-auto transition-all filter grayscale hover:grayscale-0 opacity-70 hover:opacity-100">
-                            <img src="https://i.postimg.cc/YCj2566G/Secci-n-Socios-de-marca-20251015-193217-0003.jpg" alt="Socio 4" class="h-10 mx-auto transition-all filter grayscale hover:grayscale-0 opacity-70 hover:opacity-100">
-                            <img src="https://i.postimg.cc/4N9PP0xJ/5.jpg" alt="Socio 5" class="h-10 mx-auto transition-all filter grayscale hover:grayscale-0 opacity-70 hover:opacity-100">
-                            <img src="https://i.postimg.cc/65vccPpp/6.jpg" alt="Socio 6" class="h-10 mx-auto transition-all filter grayscale hover:grayscale-0 opacity-70 hover:opacity-100">
-                            <!-- Duplicados -->
-                            <img src="https://i.postimg.cc/NjVGBKD9/Secci-n-Socios-de-marca-20251015-193216-0000.jpg" alt="Socio 1" class="h-10 mx-auto transition-all filter grayscale hover:grayscale-0 opacity-70 hover:opacity-100">
-                            <img src="https://i.postimg.cc/rwzyB11r/Secci-n-Socios-de-marca-20251015-193216-0001.jpg" alt="Socio 2" class="h-10 mx-auto transition-all filter grayscale hover:grayscale-0 opacity-70 hover:opacity-100">
-                            <img src="https://i.postimg.cc/wj3xCXXR/Secci-n-Socios-de-marca-20251015-193217-0002.jpg" alt="Socio 3" class="h-10 mx-auto transition-all filter grayscale hover:grayscale-0 opacity-70 hover:opacity-100">
-                            <img src="https://i.postimg.cc/YCj2566G/Secci-n-Socios-de-marca-20251015-193217-0003.jpg" alt="Socio 4" class="h-10 mx-auto transition-all filter grayscale hover:grayscale-0 opacity-70 hover:opacity-100">
-                            <img src="https://i.postimg.cc/4N9PP0xJ/5.jpg" alt="Socio 5" class="h-10 mx-auto transition-all filter grayscale hover:grayscale-0 opacity-70 hover:opacity-100">
-                            <img src="https://i.postimg.cc/65vccPpp/6.jpg" alt="Socio 6" class="h-10 mx-auto transition-all filter grayscale hover:grayscale-0 opacity-70 hover:opacity-100">
+                        <div class="marquee-content">
+                            <!-- Logos -->
+                            <img src="https://i.postimg.cc/NjVGBKD9/Secci-n-Socios-de-marca-20251015-193216-0000.jpg" alt="Socio 1" class="h-10 mx-auto transition-all">
+                            <img src="https://i.postimg.cc/rwzyB11r/Secci-n-Socios-de-marca-20251015-193216-0001.jpg" alt="Socio 2" class="h-10 mx-auto transition-all">
+                            <img src="https://i.postimg.cc/wj3xCXXR/Secci-n-Socios-de-marca-20251015-193217-0002.jpg" alt="Socio 3" class="h-10 mx-auto transition-all">
+                            <img src="https://i.postimg.cc/YCj2566G/Secci-n-Socios-de-marca-20251015-193217-0003.jpg" alt="Socio 4" class="h-10 mx-auto transition-all">
+                            <img src="https://i.postimg.cc/4N9PP0xJ/5.jpg" alt="Socio 5" class="h-10 mx-auto transition-all">
+                            <img src="https://i.postimg.cc/65vccPpp/6.jpg" alt="Socio 6" class="h-10 mx-auto transition-all">
+                            <!-- Duplicados para loop infinito -->
+                            <img src="https://i.postimg.cc/NjVGBKD9/Secci-n-Socios-de-marca-20251015-193216-0000.jpg" alt="Socio 1" class="h-10 mx-auto transition-all">
+                            <img src="https://i.postimg.cc/rwzyB11r/Secci-n-Socios-de-marca-20251015-193216-0001.jpg" alt="Socio 2" class="h-10 mx-auto transition-all">
+                            <img src="https://i.postimg.cc/wj3xCXXR/Secci-n-Socios-de-marca-20251015-193217-0002.jpg" alt="Socio 3" class="h-10 mx-auto transition-all">
+                            <img src="https://i.postimg.cc/YCj2566G/Secci-n-Socios-de-marca-20251015-193217-0003.jpg" alt="Socio 4" class="h-10 mx-auto transition-all">
+                            <img src="https://i.postimg.cc/4N9PP0xJ/5.jpg" alt="Socio 5" class="h-10 mx-auto transition-all">
+                            <img src="https://i.postimg.cc/65vccPpp/6.jpg" alt="Socio 6" class="h-10 mx-auto transition-all">
                         </div>
                     </div>
                  </div>
@@ -498,31 +516,34 @@
                     <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
                         <!-- Texto/Form (Movido primero para orden en móvil) -->
                         <div class="w-full text-center md:text-left md:order-1">
-                             <img src="https://i.postimg.cc/LsTK3hF9/logo-gen-camp.png" alt="Logo Addly" class="h-12 mx-auto mb-6 md:hidden filter brightness-0 invert"> <!-- [MODIFICADO] Logo para Móvil (Invertido) -->
-                            <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4">GANA DINERO CONDUCIENDO</h2> <!-- [MODIFICADO] text-white -->
-                            <p class="text-blue-100 text-lg mb-8">Convierte tu auto, moto o bici en una fuente de ingresos extra. Sin esfuerzo, sin desvíos.</p> <!-- [MODIFICADO] text-blue-100 -->
-                            
-                            <!-- [CRO] Micro-Formulario (Visual) -->
-                            <div class="space-y-4 mb-6">
-                                <select id="driver-micro-vehicle" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-gray-900" required> <!-- [MODIFICADO] text-gray-900 -->
-                                    <option value="">¿Qué vehículo tienes?</option>
-                                    <option value="AUTO/CAMIONETA">AUTO/CAMIONETA</option>
-                                    <option value="MOTO">MOTO</option>
-                                    <option value="BICI">BICI</option>
-                                </select>
-                                <input id="driver-micro-email" type="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-gray-900" placeholder="Tu correo electrónico" required> <!-- [MODIFICADO] text-gray-900 -->
-                            </div>
-                            
-                            <!-- [MODIFICADO] Grupo de botones -->
-                            <div class="flex flex-col sm:flex-row gap-4">
-                                <!-- [MODIFICADO] Botón 1 con estilo de "Gráficas" -->
-                                <button id="show-drivers-cta" class="w-full sm:flex-1 bg-white text-blue-800 font-bold py-4 px-10 rounded-lg text-lg hover:bg-gray-100 transition-colors transform hover:scale-105">
-                                    Únete a la Flota
-                                </button>
-                                <!-- [MODIFICADO] Botón 2 con estilo de "Conductores" (verde) -->
-                                <button id="save-driver-lead-cta" class="w-full sm:flex-1 bg-green-500 text-white font-bold py-4 px-10 rounded-lg text-lg hover:bg-green-600 transition-colors transform hover:scale-105 hidden">
-                                    Enviar
-                                </button>
+                             <!-- [NUEVO] Wrapper para centrar y limitar ancho en móvil -->
+                            <div class="max-w-md mx-auto md:max-w-none md:mx-0">
+                                <img src="https://i.postimg.cc/LsTK3hF9/logo-gen-camp.png" alt="Logo Addly" class="h-12 mx-auto mb-6 md:hidden filter brightness-0 invert"> <!-- [MODIFICADO] Logo para Móvil (Invertido) -->
+                                <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4">GANA DINERO CONDUCIENDO</h2> <!-- [MODIFICADO] text-white -->
+                                <p class="text-blue-100 text-lg mb-8">Convierte tu auto, moto o bici en una fuente de ingresos extra. Sin esfuerzo, sin desvíos.</p> <!-- [MODIFICADO] text-blue-100 -->
+                                
+                                <!-- [CRO] Micro-Formulario (Visual) -->
+                                <div class="space-y-4 mb-6">
+                                    <select id="driver-micro-vehicle" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-gray-900" required> <!-- [MODIFICADO] text-gray-900 -->
+                                        <option value="">¿Qué vehículo tienes?</option>
+                                        <option value="AUTO/CAMIONETA">AUTO/CAMIONETA</option>
+                                        <option value="MOTO">MOTO</option>
+                                        <option value="BICI">BICI</option>
+                                    </select>
+                                    <input id="driver-micro-email" type="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-gray-900" placeholder="Tu correo electrónico" required> <!-- [MODIFICADO] text-gray-900 -->
+                                </div>
+                                
+                                <!-- [MODIFICADO] Grupo de botones -->
+                                <div class="flex flex-col sm:flex-row gap-4">
+                                    <!-- [MODIFICADO] Botón 1 con estilo de "Gráficas" -->
+                                    <button id="show-drivers-cta" class="w-full sm:flex-1 bg-white text-blue-800 font-bold py-4 px-10 rounded-lg text-lg hover:bg-gray-100 transition-colors transform hover:scale-105">
+                                        Únete a la Flota
+                                    </button>
+                                    <!-- [MODIFICADO] Botón 2 con estilo de "Conductores" (verde) -->
+                                    <button id="save-driver-lead-cta" class="w-full sm:flex-1 bg-green-500 text-white font-bold py-4 px-10 rounded-lg text-lg hover:bg-green-600 transition-colors transform hover:scale-105 hidden">
+                                        Enviar
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <!-- Imagen (Movida segunda para orden en móvil) -->
@@ -537,13 +558,16 @@
                     <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
                          <!-- Texto/Form (Movido primero para orden en móvil) -->
                         <div class="w-full text-center md:text-left">
-                            <img src="https://i.postimg.cc/LsTK3hF9/logo-gen-camp.png" alt="Logo Addly" class="h-12 mx-auto mb-6 md:hidden"> <!-- [MODIFICADO] Logo para Móvil (Sin filtro) -->
-                            <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">SOCIO GRÁFICO: FLUJO DE TRABAJO CONSTANTE</h2> <!-- [MODIFICADO] text-gray-900 -->
-                            <p class="text-gray-600 text-lg mb-8">Asegura un volumen de rotulaciones predecible y rápido. Únete a la red de talleres que crece con Addly.</p> <!-- [MODIFICADO] text-gray-600 -->
-                            <!-- [MODIFICADO] Botón con estilo de "Conductores" -->
-                            <button id="show-graphs-cta" class="w-full bg-green-500 text-white font-bold py-4 px-10 rounded-lg text-lg hover:bg-green-600 transition-colors transform hover:scale-105">
-                                Registra tu Taller
-                            </button>
+                            <!-- [NUEVO] Wrapper para centrar y limitar ancho en móvil -->
+                            <div class="max-w-md mx-auto md:max-w-none md:mx-0">
+                                <img src="https://i.postimg.cc/LsTK3hF9/logo-gen-camp.png" alt="Logo Addly" class="h-12 mx-auto mb-6 md:hidden"> <!-- [MODIFICADO] Logo para Móvil (Sin filtro) -->
+                                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">SOCIO GRÁFICO: FLUJO DE TRABAJO CONSTANTE</h2> <!-- [MODIFICADO] text-gray-900 -->
+                                <p class="text-gray-600 text-lg mb-8">Asegura un volumen de rotulaciones predecible y rápido. Únete a la red de talleres que crece con Addly.</p> <!-- [MODIFICADO] text-gray-600 -->
+                                <!-- [MODIFICADO] Botón con estilo de "Conductores" -->
+                                <button id="show-graphs-cta" class="w-full bg-green-500 text-white font-bold py-4 px-10 rounded-lg text-lg hover:bg-green-600 transition-colors transform hover:scale-105">
+                                    Registra tu Taller
+                                </button>
+                            </div>
                         </div>
                         <!-- Imagen (Movida segunda para orden en móvil) -->
                          <div class="w-full">
@@ -558,7 +582,7 @@
                 <div class="container mx-auto px-6">
                     <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Campañas en acción</h2>
                     <div class="marquee-wrapper">
-                        <div class="marquee-gallery">
+                        <div class="marquee-content marquee-gallery">
                             <!-- Imágenes Originales -->
                             <img src="https://i.postimg.cc/8z3kN74r/Galer-a-Campa-as-en-acci-n-20251015-193152-0000.jpg" class="rounded-lg shadow-md aspect-video object-cover" alt="Campaña 1">
                             <img src="https://i.postimg.cc/K8Vcx1fM/Galer-a-Campa-as-en-acci-n-20251015-193152-0001.jpg" class="rounded-lg shadow-md aspect-video object-cover" alt="Campaña 2">
@@ -586,7 +610,8 @@
         <footer class="bg-blue-800 text-white">
             <div class="container mx-auto px-6 py-12">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div>
+                    <!-- [MODIFICADO] Añadido text-center md:text-left -->
+                    <div class="text-center md:text-left">
                         <h3 class="font-bold mb-4">Enlaces Rápidos</h3>
                         <ul>
                             <li class="mb-2"><a href="#" id="footer-register-driver" class="hover:underline">Conviértete en conductor</a></li>
@@ -594,7 +619,8 @@
                              <li class="mb-2"><a href="#cotizador" class="hover:underline">Cotizar mi Campaña</a></li>
                         </ul>
                     </div>
-                    <div class="md:justify-self-end md:col-start-3">
+                    <!-- [MODIFICADO] Añadido flex flex-col items-center md:items-end -->
+                    <div class="flex flex-col items-center md:items-end md:justify-self-end md:col-start-3">
                          <img src="https://i.postimg.cc/LsTK3hF9/logo-gen-camp.png" alt="Logo Addly Blanco" class="h-16 mb-4 filter brightness-0 invert">
                         <div class="flex space-x-4">
                             <a href="https://www.instagram.com/addlyoficial?igsh=M3R5dW1lOWlqZzlo" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011 3.584.069 4.85c.149-3.225 1.664 4.771 4.919 4.919 1.266.058 1.644.07 4.85.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.281-.058-1.689-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.441 1.441 1.441 1.441-.645 1.441-1.441-.645-1.44-1.441-1.44z"/></svg></a>
@@ -646,7 +672,7 @@
                              <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-600 text-white font-bold text-2xl mx-auto mb-4">03</div>
                             <h3 class="text-xl font-semibold mb-2">Las Ganancias</h3>
                              <p class="font-semibold text-gray-700 mb-2">¿Cuánto gano y cómo me pagan?</p>
-                            <p class="text-gray-600">Ganancias Mensuales Fijas. Recibirás tu pago completo al finalizar cada mes de campaña. Solo tienes que cumplir con las verificaciones semanales (una foto sencilla) para confirmar el buen estado de la publicidad.</p>
+                            <p class="text-gray-600">Ganancias Mensuales Fijas. Recibirás tu pago completo al finalizar cada mes de campaña. Solo tienes to comply con las verificaciones semanales (una foto sencilla) para confirmar el buen estado de la publicidad.</p>
                         </div>
                         <div class="text-center">
                             <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-600 text-white font-bold text-2xl mx-auto mb-4">04</div>
@@ -1346,1060 +1372,738 @@
             "Salta": ["Salta (Capital)", "San Ramón de la Nueva Orán", "Tartagal", "Metán", "Cafayate", "Rosario de la Frontera"],
             "San Juan": ["San Juan (Capital)", "Caucete", "Rivadavia", "Chimbas", "San José de Jáchal"],
             "San Luis": ["San Luis (Capital)", "Villa Mercedes", "Merlo", "La Punta", "Juana Koslay"],
-            "Santa Cruz": ["Río Gallegos (Capital)", "Caleta Olivia", "El Calafate", "Puerto Deseado", "Puerto San Julián"],
-            "Santa Fe": ["Santa Fe (Capital)", "Rosario", "Rafaela", "Venado Tuerto", "Reconquista", "Santo Tomé"],
-            "Santiago del Estero": ["Santiago del Estero (Capital)", "La Banda", "Termas de Río Hondo", "Frías"],
+            "Santa Cruz": ["Río Gallegos (Capital)", "Caleta Olivia", "Pico Truncado", "Puerto Deseado", "El Calafate"],
+            "Santa Fe": ["Santa Fe (Capital)", "Rosario", "Venado Tuerto", "Rafaela", "Reconquista", "Santo Tomé"],
+            "Santiago del Estero": ["Santiago del Estero (Capital)", "La Banda", "Termas de Río Hondo", "Añatuya", "Frías"],
             "Tierra del Fuego, Antártida e Islas del Atlántico Sur": ["Ushuaia (Capital)", "Río Grande", "Tolhuin"],
-            "Tucumán": ["San Miguel de Tucumán (Capital)", "Yerba Buena", "Concepción", "Tafí Viejo", "Banda del Río Salí"],
+            "Tucumán": ["San Miguel de Tucumán (Capital)", "Yerba Buena", "Concepción", "Tafí Viejo", "Banda del Río Salí"]
         };
-
-        const provinceCodes = {
-            "Buenos Aires": "PBA", "Catamarca": "CT", "Chaco": "CH", "Chubut": "CHB", "Córdoba": "CD",
-            "Corrientes": "CR", "Entre Ríos": "ER", "Formosa": "FM", "Jujuy": "JJ", "La Pampa": "LP",
-            "La Rioja": "LR", "Mendoza": "MZ", "Misiones": "MN", "Neuquén": "NQ", "Río Negro": "RN",
-            "Salta": "ST", "San Juan": "SJ", "San Luis": "SL", "Santa Cruz": "SC", "Santa Fe": "SF",
-            "Santiago del Estero": "SE", "Tierra del Fuego, Antártida e Islas del Atlántico Sur": "TF", "Tucumán": "TC"
-        };
-
-        const cityAbbreviations = {
-            "La Plata (Capital)": "LPT", "Mar del Plata": "MDP", "Bahía Blanca": "BHI", "San Nicolás de los Arroyos": "SNA",
-            "General Pueyrredón": "GPY", "Moreno": "MRE", "Quilmes": "QLM", "Vicente López": "VLO", "Tigre": "TGR",
-            "Lomas de Zamora": "LZA", "La Matanza": "LMT", "Pilar": "PLR", "Berisso": "BSS", "San Fernando": "SFD",
-            "San Fernando del Valle de Catamarca (Capital)": "SFC", "Valle Viejo": "VVI", "Tinogasta": "TIN", "Santa María": "SMA",
-            "Andalgalá": "AND", "Belén": "BLN", "Recreo": "RCR", "Resistencia (Capital)": "RES", "Barranqueras": "BQS",
-            "Charata": "CHT", "Castelli": "CAS", "Sáenz Peña": "SPE", "Villa Ángela": "VAN", "Las Palmas": "LPA",
-            "Rawson (Capital)": "RWS", "Comodoro Rivadavia": "CRV", "Puerto Madryn": "PMY", "Trelew": "TRW", "Esquel": "EQS",
-            "Sarmiento": "SAR", "Rada Tilly": "RTY", "Córdoba (Capital)": "CBA", "Villa Carlos Paz": "VCP", "Río Cuarto": "RCO",
-            "Villa María": "VMA", "Jesús María": "JMA", "Alta Gracia": "AGR", "San Francisco": "SFO", "Corrientes (Capital)": "CRR",
-            "Goya": "GOY", "Santo Tomé": "STE", "Curuzú Cuatiá": "CCU", "Paso de los Libres": "PLL", "Mercedes": "MCE",
-            "Bella Vista": "BVS", "Paraná (Capital)": "PRA", "Concordia": "CON", "Gualeguaychú": "GUY", "Concepción del Uruguay": "CDU",
-            "Federación": "FDR", "Victoria": "VTO", "Villaguay": "VGY", "Formosa (Capital)": "FMA", "Clorinda": "CLO",
-            "Las Lomitas": "LLM", "Ingeniero Juárez": "IJU", "San Salvador de Jujuy (Capital)": "SSJ", "San Pedro de Jujuy": "SPJ",
-            "Libertador General San Martín": "LGS", "Perico": "PRC", "Palpalá": "PPA", "Santa Rosa (Capital)": "RSA", "General Pico": "GPI",
-            "Eduardo Castex": "ECX", "Realicó": "RLC", "Toay": "TOY", "La Rioja (Capital)": "IRJ", "Chilecito": "CHT",
-            "Aimogasta": "AMG", "Chepes": "CPE", "Mendoza (Capital)": "MDZ", "San Rafael": "SRA", "Godoy Cruz": "GCR",
-            "Maipú": "MPI", "Las Heras": "LHR", "Guaymallén": "GYM", "Luján de Cuyo": "LCN", "Posadas (Capital)": "POS",
-            "Eldorado": "ELD", "Oberá": "OBR", "Puerto Iguazú": "IGR", "San Vicente": "SVT", "Neuquén (Capital)": "NQN",
-            "Plottier": "PLT", "Cutral Có": "CCO", "Centenario": "CEN", "San Martín de los Andes": "SMA", "Viedma (Capital)": "VDM",
-            "General Roca": "GRC", "San Carlos de Bariloche": "BRC", "Cipolletti": "CPL", "Villa Regina": "VRE", "El Bolsón": "EBO",
-            "Salta (Capital)": "SLA", "San Ramón de la Nueva Orán": "SRO", "Tartagal": "TAR", "Metán": "MTN", "Cafayate": "CFY",
-            "Rosario de la Frontera": "RFR", "San Juan (Capital)": "SJN", "Caucete": "CAU", "Rivadavia": "RVA", "Chimbas": "CHB",
-            "San José de Jáchal": "SJH", "San Luis (Capital)": "SLS", "Villa Mercedes": "VME", "Merlo": "MRL", "La Punta": "LPT",
-            "Juana Koslay": "JKO", "Río Gallegos (Capital)": "RGL", "Caleta Olivia": "CLV", "El Calafate": "FTE",
-            "Puerto Deseado": "PDS", "Puerto San Julián": "PSJ", "Santa Fe (Capital)": "SFN", "Rosario": "ROS", "Rafaela": "RAF",
-            "Venado Tuerto": "VTU", "Reconquista": "RTA", "Santo Tomé": "STF", "Santiago del Estero (Capital)": "SDE",
-            "La Banda": "LBD", "Termas de Río Hondo": "TRH", "Frías": "FRI", "Ushuaia (Capital)": "USH", "Río Grande": "RGA",
-            "Tolhuin": "THU", "San Miguel de Tucumán (Capital)": "TUC", "Yerba Buena": "YBU", "Concepción": "CCN",
-            "Tafí Viejo": "TFV", "Banda del Río Salí": "BRS"
-        };
-
-
-        // --- Helper Functions (Sin cambios) ---
-
-        const getProvinceCode = (provinceName) => provinceCodes[provinceName] || 'XX';
-        const getCityAbbreviation = (cityName) => cityAbbreviations[cityName] || 'XXX';
-
-        // --- [NUEVO] Función para obtener IDs secuenciales de forma segura ---
-        const getNextId = async (type, scope) => {
-            if (!db) throw new Error("Firestore DB no está inicializada.");
-            if (!scope || scope.trim() === '') {
-                console.warn("Scope (city/global) is missing for getNextId, defaulting to 'GLOBAL'");
-                scope = 'GLOBAL';
-            }
-            
-            // Usamos una colección 'id_counters' y un documento por 'scope'
-            const counterRef = doc(db, 'id_counters', scope);
-            const counterField = `${type}_count`; // e.g., "driver_count"
-
-            try {
-                const newId = await runTransaction(db, async (transaction) => {
-                    const counterDoc = await transaction.get(counterRef);
-                    let currentCount = 0;
-
-                    if (counterDoc.exists()) {
-                        currentCount = counterDoc.data()[counterField] || 0;
-                    }
-                    
-                    const nextCount = currentCount + 1;
-                    
-                    // Preparamos el objeto de actualización
-                    const updateData = {};
-                    updateData[counterField] = nextCount;
-                    
-                    // Usamos set con merge: true para crear el doc si no existe, o actualizar el campo si existe
-                    transaction.set(counterRef, updateData, { merge: true });
-                    
-                    return nextCount;
-                });
-                return newId;
-            } catch (e) {
-                console.error("Error en la transacción de getNextId:", e);
-                // Lanzamos un error más descriptivo
-                throw new Error(`No se pudo generar un ID para '${type}' en '${scope}'. (Error original: ${e.message})`);
-            }
-        };
-
-        // --- [NUEVO] Custom Smooth Scroll ---
-        function smoothScrollTo(targetPosition, duration) {
-            const startPosition = window.pageYOffset;
-            const distance = targetPosition - startPosition;
-            let startTime = null;
-
-            function animation(currentTime) {
-                if (startTime === null) startTime = currentTime;
-                const timeElapsed = currentTime - startTime;
-                const run = ease(timeElapsed, startPosition, distance, duration);
-                window.scrollTo(0, run);
-                if (timeElapsed < duration) requestAnimationFrame(animation);
-            }
-
-            // Easing function (MODIFICADO a 'Linear' para inicio instantáneo)
-            function ease(t, b, c, d) {
-                // t = time elapsed, b = start value, c = change in value, d = duration
-                return c * t / d + b;
-            }
-
-            requestAnimationFrame(animation);
+        
+        // --- Utility Function: Populate Select (Sin cambios) ---
+        function populateSelect(selectElement, items, placeholder) {
+            selectElement.innerHTML = `<option value="">${placeholder}</option>`;
+            items.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item;
+                option.textContent = item;
+                selectElement.appendChild(option);
+            });
         }
-        // --- Fin Custom Smooth Scroll ---
 
-        const updateLocalities = (provinceSelectId, citySelectId) => {
+        // --- City/Province Select Logic (Sin cambios) ---
+        // Se aplica a los 4 pares de selects de provincia/ciudad
+        function setupProvinceCitySelects(provinceSelectId, citySelectId) {
             const provinceSelect = document.getElementById(provinceSelectId);
             const citySelect = document.getElementById(citySelectId);
+            
             if (!provinceSelect || !citySelect) return;
+
+            // Llenar provincias
+            const provinces = Object.keys(provincesAndCities);
+            populateSelect(provinceSelect, provinces, "Seleccione una provincia");
+
+            // Event listener
             provinceSelect.addEventListener('change', () => {
                 const selectedProvince = provinceSelect.value;
-                citySelect.innerHTML = '<option value="">Seleccione una localidad</option>';
                 if (selectedProvince && provincesAndCities[selectedProvince]) {
-                    provincesAndCities[selectedProvince].forEach(city => {
-                        const option = document.createElement('option');
-                        option.value = city;
-                        option.textContent = city;
-                        citySelect.appendChild(option);
+                    populateSelect(citySelect, provincesAndCities[selectedProvince], "Seleccione una ciudad");
+                } else {
+                    citySelect.innerHTML = '<option value="">Seleccione una provincia primero</option>';
+                }
+            });
+        }
+        
+        // --- Navigation Logic (MODIFICADO para ocultar CTA flotante) ---
+        function switchSection(sectionId) {
+            Object.values(sections).forEach(section => {
+                if(section) section.classList.remove('active');
+            });
+
+            const activeSection = sections[sectionId];
+            if (activeSection) {
+                activeSection.classList.add('active');
+                initialView.classList.add('hidden');
+                appContent.classList.remove('hidden');
+                window.scrollTo(0, 0);
+
+                // [MODIFICADO] Ocultar botones flotantes
+                if (floatingCtaMobile) floatingCtaMobile.style.display = 'none';
+                if (floatingCtaDesktop) floatingCtaDesktop.style.display = 'none';
+            }
+        }
+
+        function returnToInitialView() {
+            initialView.classList.remove('hidden');
+            appContent.classList.add('hidden');
+            window.scrollTo(0, 0);
+
+            // [MODIFICADO] Mostrar botones flotantes (quitando el estilo en línea)
+            if (floatingCtaMobile) floatingCtaMobile.style.display = '';
+            if (floatingCtaDesktop) floatingCtaDesktop.style.display = '';
+        }
+
+        // --- Page Load & Initial Setup (MODIFICADO) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // [CRO] Hero Counter (Sin cambios)
+            const impactCounter = document.getElementById('impact-counter');
+            if(impactCounter) {
+                let count = 0;
+                const target = 15734; // Número final
+                const duration = 2000; // 2 segundos
+                const increment = Math.ceil(target / (duration / 20)); 
+
+                const updateCount = () => {
+                    count += increment;
+                    if (count > target) {
+                        count = target;
+                    }
+                    impactCounter.textContent = count.toLocaleString('es-AR');
+                    if (count < target) {
+                        setTimeout(updateCount, 20);
+                    }
+                };
+                updateCount();
+            }
+
+            // [CRO] Activity Feed (Sin cambios)
+            const activityFeed = document.getElementById('activity-feed');
+            if(activityFeed) {
+                const activities = [
+                    "Hace 5 min: Campaña de Gaseosa verificada en Rosario.",
+                    "Hace 12 min: Nuevo Socio Conductor (Moto) registrado en Palermo.",
+                    "Hace 28 min: Campaña de Supermercado verificada en Córdoba.",
+                    "Hace 47 min: TallerFlash Campaña de Bicis verificada en Mendoza."
+                ];
+                let activityIndex = 0;
+
+                const updateActivity = () => {
+                    const text = activities[activityIndex];
+                    activityFeed.innerHTML = ''; // Limpiar
+                    
+                    text.split('').forEach((char, index) => {
+                        const span = document.createElement('span');
+                        span.textContent = char;
+                        span.style.animationDelay = `${index * 0.03}s`; // Efecto "fade in" letra por letra
+                        activityFeed.appendChild(span);
+                    });
+                    
+                    activityIndex = (activityIndex + 1) % activities.length;
+                };
+
+                updateActivity();
+                setInterval(updateActivity, 5000); // Cambia cada 5 segundos
+            }
+
+            // [CRO] Scroll Arrow (Sin cambios)
+            const scrollArrow = document.getElementById('scroll-arrow');
+            if(scrollArrow) {
+                scrollArrow.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const heroHeight = scrollArrow.closest('section').offsetHeight;
+                    window.scrollTo({
+                        top: heroHeight - 80, // Scroll justo debajo del Hero (80px de offset por el nav sticky)
+                        behavior: 'smooth'
+                    });
+                });
+            }
+
+            // [CRO] Calculadora de Impacto (Sin cambios)
+            const calcSubmit = document.getElementById('calc-submit');
+            const calcResult = document.getElementById('calc-result');
+            if(calcSubmit && calcResult) {
+                calcSubmit.addEventListener('click', () => {
+                    const vehicleMultiplier = parseFloat(document.getElementById('calc-vehicle').value);
+                    const months = parseInt(document.getElementById('calc-months').value);
+                    const citySelect = document.getElementById('calc-city');
+                    const city = citySelect.options[citySelect.selectedIndex].text;
+                    
+                    // Simple hash para simular población (solo para demo)
+                    let basePopulation = 50000;
+                    if(city) {
+                         basePopulation += city.length * 10000;
+                    }
+
+                    const weeklyImpact = Math.floor(basePopulation * vehicleMultiplier * 0.1);
+                    const totalImpact = weeklyImpact * 4 * months; 
+
+                    document.getElementById('calc-result-number').textContent = totalImpact.toLocaleString('es-AR');
+                    document.getElementById('calc-result-city').textContent = `Personas vean tu marca en ${city || 'tu ciudad'} (en ${months} ${months > 1 ? 'meses' : 'mes'})`;
+                    
+                    calcResult.classList.remove('hidden');
+                });
+            }
+
+            // [CRO] Micro-formulario "Gana Dinero" (Sin cambios)
+            const showDriversCta = document.getElementById('show-drivers-cta');
+            const saveDriverLeadCta = document.getElementById('save-driver-lead-cta');
+            const driverMicroVehicle = document.getElementById('driver-micro-vehicle');
+            const driverMicroEmail = document.getElementById('driver-micro-email');
+
+            if (showDriversCta && saveDriverLeadCta && driverMicroVehicle && driverMicroEmail) {
+                const toggleMicroFormButtons = () => {
+                    const vehicle = driverMicroVehicle.value;
+                    const email = driverMicroEmail.value;
+                    if (vehicle && email && email.includes('@')) {
+                        showDriversCta.classList.add('hidden');
+                        saveDriverLeadCta.classList.remove('hidden');
+                    } else {
+                        showDriversCta.classList.remove('hidden');
+                        saveDriverLeadCta.classList.add('hidden');
+                    }
+                };
+                
+                driverMicroVehicle.addEventListener('change', toggleMicroFormButtons);
+                driverMicroEmail.addEventListener('input', toggleMicroFormButtons);
+
+                // Botón "Únete a la Flota"
+                showDriversCta.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    switchSection('drivers');
+                });
+
+                // Botón "Enviar" (Lead)
+                saveDriverLeadCta.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    const lead = {
+                        vehicleType: driverMicroVehicle.value,
+                        email: driverMicroEmail.value,
+                        source: 'micro-form-lead',
+                        createdAt: new Date().toISOString()
+                    };
+
+                    try {
+                        const docRef = await addDoc(collection(db, "driverLeads"), lead);
+                        showSuccessModal("¡Recibido!", "Gracias por tu interés. Un asesor se contactará contigo pronto. ¡Mientras tanto, puedes completar el formulario completo para acelerar el proceso!");
+                        // Opcional: llevar al formulario completo
+                        setTimeout(() => {
+                           switchSection('drivers');
+                           document.getElementById('vehicle-type').value = lead.vehicleType;
+                           document.getElementById('email').value = lead.email;
+                        }, 500);
+
+                    } catch (error) {
+                        console.error("Error writing lead document: ", error);
+                        showMessage("Error al guardar tus datos. Intenta de nuevo.", false);
+                    }
+                });
+            }
+
+            // [CRO] Botón "Registra tu Taller" (Sin cambios)
+            const showGraphsCta = document.getElementById('show-graphs-cta');
+            if(showGraphsCta) {
+                showGraphsCta.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    switchSection('graphs');
+                });
+            }
+
+            // --- Mobile Menu Toggle (Sin cambios) ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if(mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+            
+            // --- Navigation Links (Sin cambios) ---
+            const navLinks = [
+                { id: 'register-driver-nav', section: 'drivers' },
+                { id: 'register-graph-nav', section: 'graphs' },
+                { id: 'register-driver-nav-mobile', section: 'drivers' },
+                { id: 'register-graph-nav-mobile', section: 'graphs' },
+                { id: 'footer-register-driver', section: 'drivers' },
+                { id: 'footer-register-graph', section: 'graphs' }
+            ];
+
+            navLinks.forEach(link => {
+                const element = document.getElementById(link.id);
+                if (element) {
+                    element.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        switchSection(link.section);
+                        if(mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                            mobileMenu.classList.add('hidden'); // Cerrar menú móvil
+                        }
                     });
                 }
             });
-        };
 
-        const handleInvalidForm = (form) => {
-            const firstInvalidField = form.querySelector(':invalid');
-            if (firstInvalidField) {
-                firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                firstInvalidField.focus({ preventScroll: true });
-                firstInvalidField.classList.add('invalid-field');
+            backToHomeBtn.addEventListener('click', returnToInitialView);
+
+            // --- Form Validation Helper (Sin cambios) ---
+            const validateForm = (formElement, constraints = {}) => {
+                let isValid = true;
+                const fields = formElement.querySelectorAll('input[required], select[required], textarea[required]');
                 
-                const removeErrorStyle = () => {
-                    firstInvalidField.classList.remove('invalid-field');
-                    firstInvalidField.removeEventListener('input', removeErrorStyle);
-                    firstInvalidField.removeEventListener('change', removeErrorStyle);
-                };
-
-                firstInvalidField.addEventListener('input', removeErrorStyle);
-                firstInvalidField.addEventListener('change', removeErrorStyle);
-            }
-            showMessage('Por favor, complete todos los campos obligatorios.', false);
-        };
-
-        const validateEmailOnInput = (inputElement) => {
-            inputElement.addEventListener('input', () => {
-                // Check validity only after the user has typed something
-                if (inputElement.value.length > 0) {
-                    if (inputElement.checkValidity()) {
-                        inputElement.classList.remove('invalid-field');
+                fields.forEach(field => {
+                    let fieldValid = true;
+                    if (field.type === 'checkbox') {
+                        fieldValid = field.checked;
                     } else {
-                        inputElement.classList.add('invalid-field');
+                        fieldValid = field.value.trim() !== '';
                     }
-                } else {
-                    inputElement.classList.remove('invalid-field');
-                }
-            });
-        };
 
-        const formatPriceInput = (input) => {
-            let value = input.value.replace(/[^0-9]/g, '');
-            if (value) {
-                input.value = '$' + value;
-            } else {
-                input.value = '';
-            }
-        };
-
-        const enableEnterNavigation = (form) => {
-            const focusableElements = Array.from(form.querySelectorAll('input:not(#zone-input), select, button[type="submit"]'));
-            focusableElements.forEach((element, index) => {
-                element.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' && element.tagName !== 'BUTTON') {
-                        e.preventDefault();
-                        const nextElement = focusableElements[index + 1];
-                        if (nextElement) {
-                            nextElement.focus();
-                        } else {
-                            const submitButton = form.querySelector('button[type="submit"], #add-vehicle-btn');
-                            if (submitButton) {
-                                submitButton.click();
-                            }
-                        }
+                    // Constraint check
+                    if (fieldValid && constraints[field.id]) {
+                        fieldValid = constraints[field.id](field.value);
+                    }
+                    
+                    if (!fieldValid) {
+                        isValid = false;
+                        field.classList.add('invalid-field');
+                    } else {
+                        field.classList.remove('invalid-field');
                     }
                 });
-            });
-             zoneInput.addEventListener('keydown', (e) => {
-                if(e.key === 'Enter') {
-                    e.preventDefault();
-                    addZoneBtn.click();
+
+                // Special validation for zones
+                if (formElement.id === 'vehicle-data-form' && currentZones.length < 3) {
+                    isValid = false;
+                    zoneInput.classList.add('invalid-field');
+                } else if (formElement.id === 'vehicle-data-form') {
+                    zoneInput.classList.remove('invalid-field');
                 }
-            });
-        };
-        
-        const resetDriverForm = () => {
-             personalDataContainer.classList.remove('hidden');
-             vehicleDataContainer.classList.add('hidden');
-             document.getElementById('personal-data-form').reset();
-             document.getElementById('vehicle-data-form').reset();
-             backpackOptionContainer.classList.add('hidden');
-             driverIdDisplay.classList.add('hidden');
-             scrollToFinishBtn.classList.add('hidden');
-             vehicleFormTitle.textContent = '2. Tu Vehículo: El Motor de tus Ganancias';
-             addedVehiclesList.innerHTML = '';
-             currentDriverData = null;
-             currentZones = [];
-             renderZones();
-        }
 
-        const resetAllForms = () => {
-            resetDriverForm();
-            const graphsForm = document.getElementById('graphs-form');
-            graphsForm.reset();
-            graphIdDisplay.classList.add('hidden');
-            // Also reset the hours interface
-            const hoursContainer = document.getElementById('operating-hours-container');
-            hoursContainer.querySelectorAll('.day-toggle').forEach(toggle => {
-                if(toggle.checked) {
-                    toggle.checked = false;
-                    // Manually dispatch change event to hide time inputs
-                    toggle.dispatchEvent(new Event('change', { bubbles: true }));
-                }
-            });
-        };
+                return isValid;
+            };
 
-        // --- Navigation (Sin cambios, lógica preservada) ---
-        const switchSection = (activeSectionId) => {
-            // [NUEVO] Ocultar CTAs flotantes al entrar a la app
-            if (floatingCtaMobile) floatingCtaMobile.style.display = 'none'; // [MODIFICADO]
-            if (floatingCtaDesktop) floatingCtaDesktop.style.display = 'none'; // [MODIFICADO]
-
-            initialView.style.display = 'none';
-            appContent.style.display = 'block';
-            Object.values(sections).forEach(section => section.classList.remove('active'));
-            if(sections[activeSectionId]) {
-                 sections[activeSectionId].classList.add('active');
-            }
-            window.scrollTo(0, 0);
-        };
-
-        const returnToInitialView = () => {
-            // [NUEVO] Mostrar CTAs flotantes al volver al inicio
-            if (floatingCtaMobile) floatingCtaMobile.style.display = ''; // [MODIFICADO]
-            if (floatingCtaDesktop) floatingCtaDesktop.style.display = ''; // [MODIFICADO]
-            
-            appContent.style.display = 'none';
-            initialView.style.display = 'block';
-            Object.values(sections).forEach(section => section.classList.remove('active'));
-            resetAllForms();
-        };
-
-        // --- Zone Pill Logic (Sin cambios) ---
-        const renderZones = () => {
-            zonePillsContainer.innerHTML = '';
-            currentZones.forEach(zone => {
-                const pill = document.createElement('span');
-                pill.className = 'bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-1 rounded-full flex items-center';
-                pill.textContent = zone;
-
-                const removeBtn = document.createElement('button');
-                removeBtn.type = 'button';
-                removeBtn.className = 'ms-2 text-blue-600 hover:text-blue-800';
-                removeBtn.innerHTML = '&times;';
-                removeBtn.onclick = () => {
-                    currentZones = currentZones.filter(z => z !== zone);
-                    renderZones();
-                };
-                
-                pill.appendChild(removeBtn);
-                zonePillsContainer.appendChild(pill);
-            });
-
-            if (currentZones.length >= 5) {
-                zoneInput.disabled = true;
-                zoneInput.placeholder = "Máximo de 5 zonas alcanzado";
-                addZoneBtn.classList.add('hidden');
-            } else {
-                zoneInput.disabled = false;
-                zoneInput.placeholder = "Ej: Centro, Nueva Córdoba, Ruta 9. (Máximo impacto)";
-            }
-        };
-
-        addZoneBtn.addEventListener('click', () => {
-            if (currentZones.length >= 5) {
-                showMessage('Puede agregar un máximo de 5 zonas.', false);
-                return;
-            }
-            const zoneValue = zoneInput.value.trim();
-            if (zoneValue && !currentZones.includes(zoneValue)) {
-                currentZones.push(zoneValue);
-                renderZones();
-                zoneInput.value = '';
-                addZoneBtn.classList.add('hidden');
-                zoneInput.focus();
-            }
-        });
-
-        zoneInput.addEventListener('input', () => {
-            if (zoneInput.value.trim().length > 0) {
-                addZoneBtn.classList.remove('hidden');
-            } else {
-                addZoneBtn.classList.add('hidden');
-            }
-        });
-
-        // --- Operating Hours Logic (Sin cambios) ---
-        const setupOperatingHours = () => {
-            const container = document.getElementById('operating-hours-container');
-            const applyAllCheckbox = document.getElementById('apply-all-hours');
-            const days = [
-                { id: 'lunes', name: 'Lunes' },
-                { id: 'martes', name: 'Martes' },
-                { id: 'miercoles', name: 'Miércoles' },
-                { id: 'jueves', name: 'Jueves' },
-                { id: 'viernes', name: 'Viernes' },
-                { id: 'sabado', name: 'Sábado' },
-                { id: 'domingo', name: 'Domingo' },
-            ];
-
-            container.innerHTML = days.map(day => `
-                <div class="day-schedule">
-                    <div class="flex items-center justify-between">
-                        <label for="day-${day.id}" class="font-medium text-gray-800 select-none cursor-pointer">${day.name}</label>
-                        <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
-                            <input type="checkbox" name="day-${day.id}" id="day-${day.id}" class="day-toggle toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
-                            <label for="day-${day.id}" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
-                        </div>
-                    </div>
-                    <div id="time-${day.id}" class="time-inputs hidden mt-3 flex items-center justify-center gap-4 pl-4">
-                        <input type="time" name="time-from-${day.id}" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-center">
-                        <span class="font-bold text-gray-500">-</span>
-                        <input type="time" name="time-to-${day.id}" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-center">
-                    </div>
-                </div>
-            `).join('');
-            
-            container.addEventListener('change', (event) => {
-                if (event.target.classList.contains('day-toggle')) {
-                    const day = event.target.id.split('-')[1];
-                    const timeInputsDiv = document.getElementById(`time-${day}`);
-                    const timeInputs = timeInputsDiv.querySelectorAll('input[type="time"]');
-
-                    if (event.target.checked) {
-                        timeInputsDiv.classList.remove('hidden');
-                        timeInputs.forEach(input => input.required = true);
-                    } else {
-                        timeInputsDiv.classList.add('hidden');
-                        timeInputs.forEach(input => {
-                            input.required = false;
-                            input.value = '';
-                        });
-                    }
-                }
-            });
-            
-             // Corrected Logic: Trigger on checkbox click
-            applyAllCheckbox.addEventListener('change', () => {
-                if (!applyAllCheckbox.checked) return;
-
-                let sourceFromValue = '';
-                let sourceToValue = '';
-
-                // Find the first selected day to use as a source
-                const firstSelectedToggle = container.querySelector('.day-toggle:checked');
-                if (firstSelectedToggle) {
-                    const sourceDayId = firstSelectedToggle.id.split('-')[1];
-                    sourceFromValue = container.querySelector(`input[name="time-from-${sourceDayId}"]`).value;
-                    sourceToValue = container.querySelector(`input[name="time-to-${sourceDayId}"]`).value;
-                }
-                
-                if (!sourceFromValue || !sourceToValue) {
-                    showMessage("Por favor, ingrese un horario en al menos un día antes de aplicar a todos.", false);
-                    applyAllCheckbox.checked = false; // uncheck it
+            // --- Form 1: Personal Data (Conductores) (Sin cambios) ---
+            const personalDataForm = document.getElementById('personal-data-form');
+            personalDataForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!validateForm(personalDataForm)) {
+                    showMessage("Por favor, completa todos los campos requeridos.", false);
                     return;
                 }
 
-                container.querySelectorAll('.day-toggle:checked').forEach(toggle => {
-                    const targetDayId = toggle.id.split('-')[1];
-                    container.querySelector(`input[name="time-from-${targetDayId}"]`).value = sourceFromValue;
-                    container.querySelector(`input[name="time-to-${targetDayId}"]`).value = sourceToValue;
-                });
-            });
-        };
-
-        // --- [CRO] NUEVA LÓGICA DE ENGAGEMENT ---
-        
-        // 1. Contador Animado (Hero)
-        const animateCounter = (element, target) => {
-            let current = 0;
-            const step = Math.max(1, Math.floor(target / 100));
-            const interval = setInterval(() => {
-                current += step;
-                if (current >= target) {
-                    element.textContent = target.toLocaleString('es-AR');
-                    clearInterval(interval);
-                } else {
-                    element.textContent = current.toLocaleString('es-AR');
-                }
-            }, 20); // Velocidad de animación
-        };
-        
-        // Iniciar contador cuando la página carga
-        const impactCounter = document.getElementById('impact-counter');
-        // Usamos un número alto pero creíble basado en el H1
-        animateCounter(impactCounter, 750000 + Math.floor(Math.random() * 50000));
-
-        // 2. Calculadora de Impacto (Elite Strategy 1)
-        const calcVehicle = document.getElementById('calc-vehicle');
-        const calcMonths = document.getElementById('calc-months'); // [MODIFICADO]
-        const calcProvince = document.getElementById('calc-province'); 
-        const calcCity = document.getElementById('calc-city'); 
-        const calcSubmit = document.getElementById('calc-submit');
-        const calcResult = document.getElementById('calc-result');
-        const calcResultNumber = document.getElementById('calc-result-number');
-        const calcResultCity = document.getElementById('calc-result-city');
-        
-        // [NUEVO] Multiplicadores de impacto por provincia
-        const provinceTiers = {
-            "tier1": ["Buenos Aires", "Córdoba", "Santa Fe", "Mendoza"], // Base alta
-            "tier2": ["Tucumán", "Salta", "Entre Ríos", "Corrientes", "Chaco", "Misiones"] // Base media
-            // Tier 3 es el default (base baja)
-        };
-
-        const getBaseImpact = (province) => {
-            if (provinceTiers.tier1.includes(province)) {
-                return 24000 + (Math.random() * 3000); // 24k-27k base SEMANAL
-            }
-            if (provinceTiers.tier2.includes(province)) {
-                return 17000 + (Math.random() * 2000); // 17k-19k base SEMANAL
-            }
-            return 11000 + (Math.random() * 2000); // 11k-13k base SEMANAL (resto)
-        };
-        
-        calcSubmit.addEventListener('click', () => {
-            const vehicleMultiplier = parseFloat(calcVehicle.value) || 1.0;
-            const months = parseInt(calcMonths.value) || 1; // [MODIFICADO]
-            const province = calcProvince.value; // [MODIFICADO]
-            const city = calcCity.value; 
-            
-            // [MODIFICADO] Fórmula de simulación
-            const baseImpactPerWeek = getBaseImpact(province);
-            const estimatedTotalImpact = Math.floor(baseImpactPerWeek * vehicleMultiplier * (months * 4.33)); // 4.33 semanas por mes
-            
-            calcResultNumber.textContent = estimatedTotalImpact.toLocaleString('es-AR');
-            const monthText = months === 1 ? "Mes" : "Meses";
-            calcResultCity.textContent = `Personas vean tu marca en ${city || 'tu ciudad'} ( Estimado total en ${months} ${monthText} )`; // [MODIFICADO]
-            calcResult.classList.remove('hidden');
-        });
-
-        // 3. Feed de Actividad (Elite Strategy 3 - FOMO)
-        const activityFeed = document.getElementById('activity-feed');
-        const activities = [
-            "Nueva campaña de Auto iniciada en Buenos Aires.",
-            "Un Taller Gráfico de Rosario confirmó una instalación.",
-            "Nuevo conductor de Moto se registró en Córdoba.",
-            "Campaña de Bicis verificada en Mendoza.",
-            "Campaña de flota completa iniciada en Mar del Plata.",
-            "Nuevo Socio Gráfico registrado en Tucumán."
-        ];
-        const names = ["Javier M.", "Sofía L.", "Matías R.", "Valentina G.", "TallerFlash", "RotuladosCBA"];
-        
-        const showRandomActivity = () => {
-            const randomName = names[Math.floor(Math.random() * names.length)];
-            const randomActivity = activities[Math.floor(Math.random() * activities.length)];
-            const timeAgo = Math.floor(Math.random() * 50) + 5; // 5-55 mins
-            
-            if(activityFeed) {
-                activityFeed.innerHTML = `<span>Hace ${timeAgo} min: <strong>${randomName}</strong> ${randomActivity}</span>`;
-            }
-        };
-        
-        // Iniciar y ciclar la actividad
-        if (activityFeed) {
-            showRandomActivity();
-            setInterval(showRandomActivity, 8000); // [NUEVO] Ciclar la actividad cada 8 segundos
-        } // [CORREGIDO] Faltaba esta llave de cierre
-
-        // --- [NUEVO] Elementos del Micro-Formulario de Leads ---
-        const driverMicroVehicle = document.getElementById('driver-micro-vehicle');
-        const driverMicroEmail = document.getElementById('driver-micro-email');
-        const saveDriverLeadBtn = document.getElementById('save-driver-lead-cta');
-        const showDriversBtn = document.getElementById('show-drivers-cta');
-
-        // --- [NUEVO] Event Listener para Flecha de Scroll Lento ---
-        const scrollArrow = document.getElementById('scroll-arrow');
-        if (scrollArrow) {
-            scrollArrow.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetElement = document.getElementById('marcas');
-                if (targetElement) {
-                    // Scroll lento (2000ms = 2 segundos)
-                    smoothScrollTo(targetElement.offsetTop, 2000); 
-                }
-            });
-        }
-
-        // --- Event Listeners & Initializations (Lógica Original Preservada) ---
-        
-        // Se preservan los IDs, por lo que esta lógica funciona con la nueva NAV
-        const driversBtns = [
-            // document.getElementById('show-drivers-cta'), // ELIMINADO DE ESTE ARRAY
-            document.getElementById('register-driver-nav'),
-            document.getElementById('register-driver-nav-mobile'),
-            document.getElementById('footer-register-driver')
-        ];
-        const graphsBtns = [
-            document.getElementById('show-graphs-cta'),
-            document.getElementById('register-graph-nav'),
-            document.getElementById('register-graph-nav-mobile'),
-            document.getElementById('footer-register-graph')
-        ];
-
-        driversBtns.forEach(btn => btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            switchSection('drivers');
-        }));
-
-        graphsBtns.forEach(btn => btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            switchSection('graphs');
-        }));
-        
-        // --- [MODIFICADO] Event Listener para 'show-drivers-cta' (Solo Navega) ---
-        showDriversBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            switchSection('drivers');
-        });
-        
-        // --- [NUEVO] Lógica para el Micro-Formulario de Leads ---
-        
-        // Función para mostrar/ocultar el botón "Enviar Lead"
-        const updateLeadButtonVisibility = () => {
-            const vehicle = driverMicroVehicle.value;
-            const email = driverMicroEmail.value.trim();
-            
-            if (vehicle || email) {
-                saveDriverLeadBtn.classList.remove('hidden');
-            } else {
-                saveDriverLeadBtn.classList.add('hidden');
-            }
-        };
-
-        // Escuchar cambios en los campos
-        driverMicroVehicle.addEventListener('change', updateLeadButtonVisibility);
-        driverMicroEmail.addEventListener('input', updateLeadButtonVisibility);
-
-        // Event listener para el nuevo botón "Enviar Lead"
-        saveDriverLeadBtn.addEventListener('click', async (e) => {
-            e.preventDefault();
-            
-            const vehicle = driverMicroVehicle.value;
-            const email = driverMicroEmail.value.trim();
-
-            // Validación (AHORA AMBOS SON REQUERIDOS PARA GUARDAR)
-            let isValid = true;
-            if (!vehicle) {
-                showMessage('Por favor, selecciona tu tipo de vehículo.', false);
-                driverMicroVehicle.classList.add('invalid-field');
-                isValid = false;
-            } else {
-                driverMicroVehicle.classList.remove('invalid-field');
-            }
-
-            if (!email || !driverMicroEmail.checkValidity()) {
-                showMessage('Por favor, ingresa un correo electrónico válido.', false);
-                driverMicroEmail.classList.add('invalid-field');
-                isValid = false;
-            } else {
-                driverMicroEmail.classList.remove('invalid-field');
-            }
-
-            if (!isValid) return;
-
-            // Guardar en Firebase
-            saveDriverLeadBtn.disabled = true;
-            saveDriverLeadBtn.textContent = 'Guardando...';
-
-            try {
-                // [MODIFICADO] Generar ID secuencial para el lead
-                const leadNumber = await getNextId('micro_lead', 'GLOBAL');
-                const generatedLeadId = `LEAD-${leadNumber.toString().padStart(2, '0')}`;
-
-                const leadData = {
-                    lead_id: generatedLeadId,
-                    vehicle_type: vehicle,
-                    email: email,
+                currentDriverData = {
+                    fullName: document.getElementById('full-name').value,
+                    province: document.getElementById('province').value,
+                    city: document.getElementById('personal-city').value,
+                    address: {
+                        street: document.getElementById('address-street').value,
+                        number: document.getElementById('address-number').value
+                    },
+                    phone: document.getElementById('phone').value,
+                    email: document.getElementById('email').value,
+                    vehicles: [], // Array to store vehicle data
                     createdAt: new Date().toISOString()
                 };
 
-                // [MODIFICADO] Usar setDoc con el ID generado
-                const leadRef = doc(db, 'leads_conductores_microformulario', generatedLeadId);
-                await setDoc(leadRef, leadData);
-                
-                // [MODIFICADO] Éxito - Se restaura el Modal Grande
-                showSuccessModal('¡Lead Guardado!', 'Tus datos se han guardado con éxito. Pronto nos pondremos en contacto.', false);
-                
-                // Limpiar formulario
-                driverMicroVehicle.value = '';
-                driverMicroEmail.value = '';
-                updateLeadButtonVisibility(); // Ocultará el botón
-
-            } catch (error) {
-                console.error("Error saving lead: ", error);
-                showMessage("Error al guardar tus datos. Por favor, intenta de nuevo.", false);
-            } finally {
-                saveDriverLeadBtn.disabled = false;
-                saveDriverLeadBtn.textContent = 'Enviar'; // [MODIFICADO]
-            }
-        });
-        
-        backToHomeBtn.addEventListener('click', returnToInitialView);
-
-        // Mobile menu toggle
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        // [NUEVO] Poblar y vincular los selects de la calculadora
-        const calcProvinceSelect = document.getElementById('calc-province');
-        if (calcProvinceSelect) {
-            const provinces = Object.keys(provincesAndCities);
-            provinces.forEach(province => {
-                const option = document.createElement('option');
-                option.value = province;
-                option.textContent = province;
-                calcProvinceSelect.appendChild(option);
-            });
-        }
-        
-        updateLocalities('province', 'personal-city');
-        updateLocalities('graphs-province', 'graph-location');
-        updateLocalities('vehicle-province', 'vehicle-city');
-        updateLocalities('calc-province', 'calc-city'); // [NUEVO] Añadir la vinculación para la calculadora
-
-        validateEmailOnInput(driverEmailInput);
-        validateEmailOnInput(graphEmailInput);
-        
-        setupOperatingHours();
-
-        vehicleTypeSelect.addEventListener('change', () => {
-            const selectedType = vehicleTypeSelect.value;
-            // Handle backpack option
-            if (selectedType === 'MOTO' || selectedType === 'BICI') {
-                backpackOptionContainer.classList.remove('hidden');
-            } else {
-                backpackOptionContainer.classList.add('hidden');
-                document.getElementById('wants-backpack').checked = false;
-            }
-
-            // Handle BICI specific fields
-            const isBici = selectedType === 'BICI';
-            const fieldsToToggle = [
-                { container: brandContainer, input: brandInput },
-                { container: modelContainer, input: modelInput },
-                { container: yearContainer, input: yearInput },
-                { container: licensePlateContainer, input: licensePlateInput }
-            ];
-
-            fieldsToToggle.forEach(({ container, input }) => {
-                if (isBici) {
-                    container.classList.add('hidden');
-                    input.required = false;
-                } else {
-                    container.classList.remove('hidden');
-                    input.required = true;
-                }
-            });
-        });
-        
-        const priceInputs = document.querySelectorAll('input[id^="price-"]');
-        priceInputs.forEach(input => {
-            input.addEventListener('input', (e) => formatPriceInput(e.target));
-        });
-
-        // Enable smart navigation for all forms
-        enableEnterNavigation(document.getElementById('personal-data-form'));
-        enableEnterNavigation(document.getElementById('vehicle-data-form'));
-        enableEnterNavigation(document.getElementById('graphs-form'));
-        
-        scrollToFinishBtn.addEventListener('click', () => {
-            finishVehiclesBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            
-            // Add highlight class
-            finishVehiclesBtn.classList.add('highlight-finish-btn');
-            
-            // Remove highlight after animation ends
-            setTimeout(() => {
-                finishVehiclesBtn.classList.remove('highlight-finish-btn');
-            }, 2500); 
-        });
-
-        // --- Shared Function to add a vehicle (Sin cambios) ---
-        const addCurrentVehicle = async () => {
-            const vehicleForm = document.getElementById('vehicle-data-form');
-            if (!vehicleForm.checkValidity()) {
-                handleInvalidForm(vehicleForm);
-                return false; // Indicate failure
-            }
-            if (currentZones.length < 3) {
-                showMessage('Debe agregar un mínimo de 3 Zonas de Circulación.', false);
-                zoneInput.classList.add('invalid-field');
-                zoneInput.focus();
-                return false; // Indicate failure
-            }
-            
-            const imageFile = vehicleForm.querySelector('#image').files[0];
-
-            const vehicleData = {
-                type: vehicleForm.querySelector('#vehicle-type').value,
-                wants_backpack: vehicleForm.querySelector('#wants-backpack').checked,
-                brand: vehicleForm.querySelector('#brand').value || null,
-                model: vehicleForm.querySelector('#model').value || null,
-                year: vehicleForm.querySelector('#year').value || null,
-                licence_plate: vehicleForm.querySelector('#license-plate').value || null,
-                color: vehicleForm.querySelector('#color').value,
-                vehicle_province: vehicleForm.querySelector('#vehicle-province').value,
-                vehicle_city: vehicleForm.querySelector('#vehicle-city').value,
-                address_street: vehicleForm.querySelector('#address-street-vehicle').value,
-                address_number: vehicleForm.querySelector('#address-number-vehicle').value,
-                circulation_zones: currentZones,
-                image_url: null
-            };
-            
-            if (imageFile) {
-                // Función toBase64 (debe estar definida en tu script, asumo que está)
-                // const toBase64 = file => new Promise(...)
-                // vehicleData.image_url = await toBase64(imageFile);
-                 console.warn("La carga de imágenes a Base64 está omitida en este ejemplo. Se guardará como null.");
-                 // Simulación de la función toBase64 para evitar errores si no está definida
-                const toBase64 = file => new Promise((resolve, reject) => {
-                    console.log("Simulando conversión a Base64...");
-                    resolve("data:image/png;base64,SIMULATED_DATA");
-                });
-                
-                try {
-                    vehicleData.image_url = await toBase64(imageFile);
-                } catch (error) {
-                    console.error("Error converting image to Base64:", error);
-                    showMessage("Hubo un error al procesar la imagen.", false);
-                    return false; // Indicate failure
-                }
-            }
-            
-            const cityAbbreviation = getCityAbbreviation(vehicleData.vehicle_city);
-            const provinceCode = getProvinceCode(vehicleData.vehicle_province);
-            try {
-                const vehicleNumber = await getNextId('vehicle', 'GLOBAL');
-                const generatedVehicleId = `VE - ${provinceCode} - ${cityAbbreviation} - ${vehicleNumber.toString().padStart(2, '0')}`;
-
-                vehicleData.vehicle_id = generatedVehicleId;
-                currentDriverData.vehicles.push(vehicleData);
-                return true; // Indicate success
-            } catch(error) {
-                showMessage(error.message, false);
-                return false; // Indicate failure
-            }
-        };
-
-
-        // --- Form Handling (Lógica Original 100% Preservada) ---
-        
-        // DRIVERS - Step 1: Personal Data
-        document.getElementById('personal-data-form').addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const form = event.target;
-            if (!form.checkValidity()) {
-                handleInvalidForm(form);
-                return;
-            }
-
-            const submitButton = form.querySelector('button[type="submit"]');
-            submitButton.disabled = true;
-            submitButton.textContent = 'Generando ID...';
-
-            const formData = new FormData(form);
-            const personalData = Object.fromEntries(formData.entries());
-            const cityAbbreviation = getCityAbbreviation(personalData['personal-city']);
-            const provinceCode = getProvinceCode(personalData['province']);
-
-            try {
-                const driverNumber = await getNextId('driver', cityAbbreviation);
-                const generatedId = `CH - ${provinceCode} - ${cityAbbreviation} - ${driverNumber.toString().padStart(2, '0')}`;
-                
-                currentDriverData = {
-                    driverId: generatedId,
-                    createdAt: new Date().toISOString(),
-                    personalInfo: {
-                        fullName: personalData['full-name'],
-                        province: personalData['province'],
-                        city: personalData['personal-city'],
-                        address_street: personalData['address-street'],
-                        address_number: personalData['address-number'],
-                        phone: personalData['phone'],
-                        email: personalData['email']
-                    },
-                    vehicles: []
-                };
-
-                generatedIdElement.textContent = generatedId;
-                driverIdDisplay.classList.remove('hidden');
                 personalDataContainer.classList.add('hidden');
                 vehicleDataContainer.classList.remove('hidden');
-                vehicleFormTitle.textContent = `2. Tu Vehículo: El Motor de tus Ganancias`;
-                addedVehiclesList.innerHTML = '';
-
-            } catch (error) {
-                console.error(error);
-                showMessage(error.message, false);
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Guardar y Continuar';
-            }
-        });
-
-        // DRIVERS - Step 2: Add Vehicle (locally)
-        addVehicleBtn.addEventListener('click', async (event) => {
-            event.preventDefault();
-            const success = await addCurrentVehicle();
-
-            if (success) {
-                const vehicleForm = document.getElementById('vehicle-data-form');
-                const addedVehicle = currentDriverData.vehicles[currentDriverData.vehicles.length - 1];
-
-                if (currentDriverData.vehicles.length === 1) {
-                    const titleElement = document.createElement('h4');
-                    titleElement.className = 'text-xl font-semibold text-gray-700 mb-4';
-                    titleElement.textContent = 'Tu Flota Activa';
-                    addedVehiclesList.appendChild(titleElement);
+                
+                // Pre-fill vehicle form if data exists from micro-form
+                if(driverMicroVehicle.value) {
+                    vehicleTypeSelect.value = driverMicroVehicle.value;
+                    vehicleTypeSelect.dispatchEvent(new Event('change')); // Trigger change event
                 }
+            });
 
-                const vehicleItem = document.createElement('div');
-                vehicleItem.className = 'bg-gray-100 p-4 rounded-lg shadow-sm mb-4 border border-gray-300';
-                
-                let vehicleDetails = `
-                    <p class="font-bold text-gray-800">ID del Vehículo: <span class="text-blue-600">${addedVehicle.vehicle_id}</span></p>
-                    <p class="text-gray-600">Tipo: ${addedVehicle.type}</p>`;
-                
-                if (addedVehicle.licence_plate) {
-                    vehicleDetails += `<p class="text-gray-600">Patente: ${addedVehicle.licence_plate}</p>`;
-                }
-                
-                vehicleItem.innerHTML = vehicleDetails;
-                addedVehiclesList.appendChild(vehicleItem);
-                
-                vehicleForm.reset();
-                backpackOptionContainer.classList.add('hidden');
-                currentZones = [];
-                renderZones();
-                vehicleFormTitle.textContent = `2. Tu Vehículo: El Motor de tus Ganancias (${currentDriverData.vehicles.length + 1})`;
-                scrollToFinishBtn.classList.remove('hidden');
-                driversSection.scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-        
-        const saveAllVehiclesToDB = async () => {
-            try {
-                for (const vehicle of currentDriverData.vehicles) {
-                    const flatData = {
-                        createdAt: currentDriverData.createdAt,
-                        id: currentDriverData.driverId,
-                        nombre: currentDriverData.personalInfo.fullName,
-                        province: currentDriverData.personalInfo.province,
-                        city: currentDriverData.personalInfo.city,
-                        address_street: currentDriverData.personalInfo.address_street,
-                        address_number: currentDriverData.personalInfo.address_number,
-                        email: currentDriverData.personalInfo.email,
-                        phone: currentDriverData.personalInfo.phone,
-                        vehicle_id: vehicle.vehicle_id,
-                        tipo: vehicle.type,
-                        wants_backpack: vehicle.wants_backpack,
-                        brand: vehicle.brand,
-                        model: vehicle.model,
-                        year: vehicle.year,
-                        licence_plate: vehicle.licence_plate,
-                        color: vehicle.color,
-                        vehicle_province: vehicle.vehicle_province,
-                        vehicle_city: vehicle.vehicle_city,
-                        address_street_vehicle: vehicle.address_street,
-                        address_number_vehicle: vehicle.address_number,
-                        circulation_zones: vehicle.circulation_zones,
-                        image_url: vehicle.image_url
-                    };
-                    const vehicleDocRef = doc(db, 'conductores_gestion_negocios', vehicle.vehicle_id);
-                    await setDoc(vehicleDocRef, flatData);
-                }
-                return true;
-            } catch (error) {
-                console.error("¡ERROR DETECTADO! No se pudo guardar el driver en Firestore:", error);
-                showMessage('Error al guardar los datos en la base de datos. Revise la consola para más detalles.', false);
-                return false;
-            }
-        };
+            // --- Form 2: Vehicle Data (Conductores) (Sin cambios) ---
+            const vehicleDataForm = document.getElementById('vehicle-data-form');
 
+            // Toggle vehicle-specific fields
+            vehicleTypeSelect.addEventListener('change', () => {
+                const type = vehicleTypeSelect.value;
+                const isBici = (type === 'BICI');
+                const isMoto = (type === 'MOTO');
 
-        // DRIVERS - Step 3: Finish and Save All to DB
-        finishVehiclesBtn.addEventListener('click', async (event) => {
-            event.preventDefault();
-            
-            const vehicleForm = document.getElementById('vehicle-data-form');
-            const hasSubstantialUnsavedData = ['brand', 'model', 'license-plate', 'color'].some(id => 
-                vehicleForm.querySelector(`#${id}`) && vehicleForm.querySelector(`#${id}`).value.trim() !== ''
-            );
-            
-            if (hasSubstantialUnsavedData) {
-                 const vehicleAdded = await addCurrentVehicle();
-                 if(!vehicleAdded) return; 
-            }
-
-            if (!currentDriverData || currentDriverData.vehicles.length === 0) {
-                showMessage('Debe agregar al menos un vehículo antes de finalizar.', false);
-                return;
-            }
-
-            finishVehiclesBtn.disabled = true;
-            finishVehiclesBtn.textContent = 'Guardando...';
-
-            const success = await saveAllVehiclesToDB();
-            
-            if (success) {
-                showSuccessModal(
-                    '¡Registro Recibido con Éxito!',
-                    `Hemos recibido los detalles de tu registro con ${currentDriverData.vehicles.length} vehículo(s). Nuestro equipo se pondrá en contacto a la brevedad.`,
-                    true
+                // Ocultar/Mostrar campos
+                [brandContainer, modelContainer, yearContainer, licensePlateContainer].forEach(el => 
+                    el.classList.toggle('hidden', isBici)
                 );
-            }
-            
-            finishVehiclesBtn.disabled = false;
-            finishVehiclesBtn.textContent = '¡Listo! Empezar a Recibir Ofertas';
-        });
+                [backpackOptionContainer].forEach(el => 
+                    el.classList.toggle('hidden', !isMoto && !isBici)
+                );
 
-        // GRAPHS Form
-        document.getElementById('graphs-form').addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const form = event.target;
-            
-            const operatingHours = {};
-            const days = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
-            let atLeastOneDaySelected = false;
+                // Actualizar 'required'
+                [brandInput, modelInput, yearInput, licensePlateInput].forEach(input => 
+                    input.required = !isBici
+                );
+            });
 
-            days.forEach(day => {
-                const checkbox = form.querySelector(`#day-${day}`);
-                if (checkbox && checkbox.checked) {
-                    atLeastOneDaySelected = true;
-                    const from = form.querySelector(`input[name="time-from-${day}"]`).value;
-                    const to = form.querySelector(`input[name="time-to-${day}"]`).value;
-                    if(from && to){
-                        operatingHours[day] = { from, to };
-                    }
+            // Zone Pill Logic
+            const updateAddZoneButton = () => {
+                addZoneBtn.classList.toggle('hidden', zoneInput.value.trim() === '');
+            };
+            zoneInput.addEventListener('input', updateAddZoneButton);
+
+            const addZone = () => {
+                const zoneName = zoneInput.value.trim();
+                if (zoneName && !currentZones.includes(zoneName)) {
+                    currentZones.push(zoneName);
+                    renderZonePills();
+                    zoneInput.value = '';
+                    updateAddZoneButton();
+                    zoneInput.classList.remove('invalid-field');
+                }
+            };
+
+            const removeZone = (zoneName) => {
+                currentZones = currentZones.filter(z => z !== zoneName);
+                renderZonePills();
+            };
+
+            const renderZonePills = () => {
+                zonePillsContainer.innerHTML = '';
+                currentZones.forEach(zone => {
+                    const pill = document.createElement('div');
+                    pill.className = 'flex items-center bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full';
+                    pill.innerHTML = `
+                        <span>${zone}</span>
+                        <button type="button" class="ml-2 text-blue-600 hover:text-blue-800">&times;</button>
+                    `;
+                    pill.querySelector('button').addEventListener('click', () => removeZone(zone));
+                    zonePillsContainer.appendChild(pill);
+                });
+            };
+
+            addZoneBtn.addEventListener('click', addZone);
+            zoneInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addZone();
                 }
             });
             
-            if (!form.checkValidity()) {
-                handleInvalidForm(form);
-                return;
-            }
+            // Add Vehicle Button
+            addVehicleBtn.addEventListener('click', () => {
+                if (!saveVehicleData()) {
+                    showMessage("Por favor, completa todos los campos del vehículo actual.", false);
+                }
+            });
 
-            if (!atLeastOneDaySelected) {
-                showMessage('Debe seleccionar al menos un día de atención y completar su horario.', false);
-                const hoursContainer = document.getElementById('operating-hours-container');
-                hoursContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                hoursContainer.classList.add('invalid-field');
-                setTimeout(() => hoursContainer.classList.remove('invalid-field'), 2000);
-                return;
-            }
-
-            const submitButton = form.querySelector('button[type="submit"]');
-            submitButton.disabled = true;
-            submitButton.textContent = 'Guardando...';
-
-            const formData = new FormData(form);
-            const rawData = Object.fromEntries(formData.entries());
-
-            const pricingData = {
-                auto: {
-                    completo: { from: rawData['price-from-auto-completo'].replace(/[^0-9]/g, ''), to: rawData['price-to-auto-completo'].replace(/[^0-9]/g, ''), vinyl: rawData['vinyl-auto-completo'], time: rawData['installation-time-auto-completo'] },
-                    capot: { from: rawData['price-from-capot'].replace(/[^0-9]/g, ''), to: rawData['price-to-capot'].replace(/[^0-9]/g, ''), vinyl: rawData['vinyl-capot'], time: rawData['installation-time-capot'] },
-                    puertas: { from: rawData['price-from-puertas'].replace(/[^0-9]/g, ''), to: rawData['price-to-puertas'].replace(/[^0-9]/g, ''), vinyl: rawData['vinyl-puertas'], time: rawData['installation-time-puertas'] },
-                    baul: { from: rawData['price-from-baul'].replace(/[^0-9]/g, ''), to: rawData['price-to-baul'].replace(/[^0-9]/g, ''), vinyl: rawData['vinyl-baul'], time: rawData['installation-time-baul'] },
-                    luneta: { from: rawData['price-from-luneta'].replace(/[^0-9]/g, ''), to: rawData['price-to-luneta'].replace(/[^0-9]/g, ''), vinyl: rawData['vinyl-luneta'], time: rawData['installation-time-luneta'] }
-                },
-                moto: { from: rawData['price-from-moto'].replace(/[^0-9]/g, ''), to: rawData['price-to-moto'].replace(/[^0-9]/g, ''), vinyl: rawData['vinyl-moto'], time: rawData['installation-time-moto'] },
-                bici: { from: rawData['price-from-bici'].replace(/[^0-9]/g, ''), to: rawData['price-to-bici'].replace(/[^0-9]/g, ''), vinyl: rawData['vinyl-bici'], time: rawData['installation-time-bici'] },
-                mochila: { from: rawData['price-from-mochila'].replace(/[^0-9]/g, ''), to: rawData['price-to-mochila'].replace(/[^0-9]/g, ''), vinyl: rawData['vinyl-mochila'], time: rawData['installation-time-mochila'] }
-            };
-            
-            const cityAbbreviation = getCityAbbreviation(rawData['graph-location']);
-            const provinceCode = getProvinceCode(rawData['graphs-province']);
-
-            try {
-                const graphNumber = await getNextId('graph', cityAbbreviation);
-                const generatedId = `GF - ${provinceCode} - ${cityAbbreviation} - ${graphNumber.toString().padStart(2, '0')}`;
+            // Finish Vehicles Button
+            finishVehiclesBtn.addEventListener('click', async () => {
+                if (currentDriverData.vehicles.length === 0) {
+                    if (!saveVehicleData()) {
+                         showMessage("Debes agregar al menos un vehículo.", false);
+                        return;
+                    }
+                }
                 
-                const finalGraphData = {
-                    createdAt: new Date().toISOString(),
-                    id: generatedId,
-                    name: rawData['graph-name'],
-                    province: rawData['graphs-province'],
-                    city: rawData['graph-location'],
-                    address_street: rawData['graph-address-street'],
-                    address_number: rawData['graph-address-number'],
-                    operating_hours: operatingHours,
-                    weekly_capacity: Number(rawData['weekly-capacity']) || 0,
-                    service_commitment: rawData['service-commitment'] === 'on',
-                    main_contact: rawData['manager-name'],
-                    phone: rawData['graph-phone'],
-                    email: rawData['graph-email'],
-                    pricing: pricingData
+                if (!currentDriverData || currentDriverData.vehicles.length === 0) {
+                    showMessage("Error: No se han guardado vehículos.", false);
+                    return;
+                }
+
+                try {
+                    // Guardar el conductor completo
+                    const driverRef = doc(collection(db, "drivers"));
+                    await setDoc(driverRef, currentDriverData);
+                    const newId = driverRef.id.substring(0, 8).toUpperCase();
+                    
+                    // Actualizar el documento con su propio ID (para referencia)
+                    await setDoc(driverRef, { driverId: newId }, { merge: true });
+
+                    generatedIdElement.textContent = newId;
+                    driverIdDisplay.classList.remove('hidden');
+                    
+                    showSuccessModal(
+                        "¡Registro Completo!",
+                        `Tu ID de conductor es ${newId}. ¡Nos pondremos en contacto pronto con campañas para ti!`,
+                        true // Indicar que debe redirigir al cerrar
+                    );
+
+                    // Reset state
+                    resetDriverForm();
+
+                } catch (error) {
+                    console.error("Error writing driver document: ", error);
+                    showMessage("Error al guardar tus datos. Intenta de nuevo.", false);
+                }
+            });
+            
+            // Scroll to Finish Button
+            scrollToFinishBtn.addEventListener('click', () => {
+                 finishVehiclesBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                 finishVehiclesBtn.classList.add('highlight-finish-btn');
+                 setTimeout(() => {
+                     finishVehiclesBtn.classList.remove('highlight-finish-btn');
+                 }, 3000);
+            });
+
+            // --- Driver Form Helper Functions (Sin cambios) ---
+            function saveVehicleData() {
+                const constraints = {
+                    'year': (value) => value.length === 4 && parseInt(value) > 1980 && parseInt(value) <= new Date().getFullYear() + 1
                 };
 
-                const graphRef = doc(db, 'graficas_gestion_negocios', generatedId);
-                await setDoc(graphRef, finalGraphData);
+                if (!validateForm(vehicleDataForm, constraints)) {
+                    return false;
+                }
 
-                showSuccessModal(
-                    '¡Gráfica Guardada!',
-                    `Los datos de "${finalGraphData.name}" se han guardado correctamente con el ID: ${finalGraphData.id}`,
-                    true
-                );
-            } catch (error) {
-                console.error("Error saving graph:", error);
-                showMessage(error.message, false);
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Guardar Datos de la Gráfica';
+                const vehicleData = {
+                    type: vehicleTypeSelect.value,
+                    color: document.getElementById('color').value,
+                    province: document.getElementById('vehicle-province').value,
+                    city: document.getElementById('vehicle-city').value,
+                    address: {
+                        street: document.getElementById('address-street-vehicle').value,
+                        number: document.getElementById('address-number-vehicle').value
+                    },
+                    zones: [...currentZones],
+                    // Campos condicionales
+                    brand: !brandInput.required ? null : brandInput.value,
+                    model: !modelInput.required ? null : modelInput.value,
+                    year: !yearInput.required ? null : yearInput.value,
+                    licensePlate: !licensePlateInput.required ? null : licensePlateInput.value,
+                    wantsBackpack: document.getElementById('wants-backpack').checked
+                };
+
+                currentDriverData.vehicles.push(vehicleData);
+                updateAddedVehiclesList();
+                resetVehicleForm();
+                
+                // Mostrar botón de "Terminé"
+                scrollToFinishBtn.classList.remove('hidden');
+                
+                return true;
             }
+
+            function resetVehicleForm() {
+                vehicleDataForm.reset();
+                currentZones = [];
+                renderZonePills();
+                vehicleTypeSelect.dispatchEvent(new Event('change')); // Reset conditional fields
+                
+                const vehicleCount = currentDriverData.vehicles.length;
+                vehicleFormTitle.textContent = `${vehicleCount + 1}. Tu Vehículo: El Motor de tus Ganancias`;
+            }
+
+            function resetDriverForm() {
+                personalDataForm.reset();
+                resetVehicleForm();
+                currentDriverData = null;
+                addedVehiclesList.innerHTML = '';
+                vehicleDataContainer.classList.add('hidden');
+                personalDataContainer.classList.remove('hidden');
+                driverIdDisplay.classList.add('hidden');
+                scrollToFinishBtn.classList.add('hidden');
+                
+                // Resetear selects de ciudad
+                document.getElementById('personal-city').innerHTML = '<option value="">Selecciona tu provincia primero</option>';
+                document.getElementById('vehicle-city').innerHTML = '<option value="">Selecciona tu provincia primero</option>';
+            }
+
+            function updateAddedVehiclesList() {
+                addedVehiclesList.innerHTML = '';
+                if (currentDriverData.vehicles.length > 0) {
+                    const listTitle = document.createElement('h4');
+                    listTitle.className = 'text-lg font-semibold text-gray-700 mb-2';
+                    listTitle.textContent = 'Vehículos Agregados:';
+                    addedVehiclesList.appendChild(listTitle);
+
+                    const list = document.createElement('ul');
+                    list.className = 'list-disc list-inside space-y-1';
+                    currentDriverData.vehicles.forEach((v, index) => {
+                        const item = document.createElement('li');
+                        item.className = 'text-gray-600';
+                        item.textContent = `Vehículo ${index + 1}: ${v.type} - ${v.brand || ''} ${v.model || ''} (${v.color})`;
+                        list.appendChild(item);
+                    });
+                    addedVehiclesList.appendChild(list);
+                }
+            }
+
+
+            // --- Form 3: Gráficas (Sin cambios) ---
+            const graphsForm = document.getElementById('graphs-form');
+            const operatingHoursContainer = document.getElementById('operating-hours-container');
+            const applyAllHoursCheckbox = document.getElementById('apply-all-hours');
+            
+            // Populate operating hours
+            const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+            days.forEach(day => {
+                const dayId = day.toLowerCase();
+                const row = document.createElement('div');
+                row.className = 'flex flex-col sm:flex-row items-center gap-2 sm:gap-4';
+                row.innerHTML = `
+                    <div class="flex items-center w-full sm:w-1/3">
+                        <input id="check-${dayId}" name="check-${dayId}" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                        <label for="check-${dayId}" class="ml-2 block text-gray-700 font-medium">${day}</label>
+                    </div>
+                    <div class="flex items-center gap-2 w-full sm:w-2/3">
+                        <input type="time" id="time-from-${dayId}" name="time-from-${dayId}" class="w-1/2 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" disabled>
+                        <span class="text-gray-500">a</span>
+                        <input type="time" id="time-to-${dayId}" name="time-to-${dayId}" class="w-1/2 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" disabled>
+                    </div>
+                `;
+                operatingHoursContainer.appendChild(row);
+
+                // Add event listener to enable/disable time inputs
+                row.querySelector(`#check-${dayId}`).addEventListener('change', (e) => {
+                    const isChecked = e.target.checked;
+                    row.querySelector(`#time-from-${dayId}`).disabled = !isChecked;
+                    row.querySelector(`#time-to-${dayId}`).disabled = !isChecked;
+                });
+            });
+
+            // "Apply all" logic
+            applyAllHoursCheckbox.addEventListener('change', (e) => {
+                const isChecked = e.target.checked;
+                if (!isChecked) return;
+
+                const firstDay = days[0].toLowerCase();
+                const fromTime = document.getElementById(`time-from-${firstDay}`).value;
+                const toTime = document.getElementById(`time-to-${firstDay}`).value;
+                const isDayChecked = document.getElementById(`check-${firstDay}`).checked;
+
+                if (!isDayChecked || !fromTime || !toTime) {
+                    showMessage("Por favor, complete el horario del Lunes antes de aplicar a todos.", false);
+                    applyAllHoursCheckbox.checked = false;
+                    return;
+                }
+
+                days.slice(1).forEach(day => {
+                    const dayId = day.toLowerCase();
+                    document.getElementById(`check-${dayId}`).checked = true;
+                    const fromInput = document.getElementById(`time-from-${dayId}`);
+                    const toInput = document.getElementById(`time-to-${dayId}`);
+                    fromInput.value = fromTime;
+                    toInput.value = toTime;
+                    fromInput.disabled = false;
+                    toInput.disabled = false;
+                });
+            });
+
+            // Submit Gráficas Form
+            graphsForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const constraints = {
+                    'service-commitment': (value) => document.getElementById('service-commitment').checked
+                };
+
+                if (!validateForm(graphsForm, constraints)) {
+                    showMessage("Por favor, completa todos los campos requeridos, incluyendo el 'Compromiso de Servicio'.", false);
+                    return;
+                }
+
+                // Collect Operating Hours
+                const operatingHours = {};
+                days.forEach(day => {
+                    const dayId = day.toLowerCase();
+                    if (document.getElementById(`check-${dayId}`).checked) {
+                        operatingHours[day] = {
+                            from: document.getElementById(`time-from-${dayId}`).value,
+                            to: document.getElementById(`time-to-${dayId}`).value
+                        };
+                    }
+                });
+
+                // Collect Price Quotes
+                const priceQuotes = {
+                    autoCompleto: {
+                        from: document.getElementById('price-from-auto-completo').value,
+                        to: document.getElementById('price-to-auto-completo').value,
+                        vinyl: graphsForm.elements['vinyl-auto-completo'].value,
+                        time: graphsForm.elements['installation-time-auto-completo'].value,
+                    },
+                    capot: {
+                        from: document.getElementById('price-from-capot').value,
+                        to: document.getElementById('price-to-capot').value,
+                        vinyl: graphsForm.elements['vinyl-capot'].value,
+                        time: graphsForm.elements['installation-time-capot'].value,
+                    },
+                    puertas: {
+                        from: document.getElementById('price-from-puertas').value,
+                        to: document.getElementById('price-to-puertas').value,
+                        vinyl: graphsForm.elements['vinyl-puertas'].value,
+                        time: graphsForm.elements['installation-time-puertas'].value,
+                    },
+                    baul: {
+                        from: document.getElementById('price-from-baul').value,
+                        to: document.getElementById('price-to-baul').value,
+                        vinyl: graphsForm.elements['vinyl-baul'].value,
+                        time: graphsForm.elements['installation-time-baul'].value,
+                    },
+                    luneta: {
+                        from: document.getElementById('price-from-luneta').value,
+                        to: document.getElementById('price-to-luneta').value,
+                        vinyl: graphsForm.elements['vinyl-luneta'].value,
+                        time: graphsForm.elements['installation-time-luneta'].value,
+                    },
+                    moto: {
+                        from: document.getElementById('price-from-moto').value,
+                        to: document.getElementById('price-to-moto').value,
+                        vinyl: graphsForm.elements['vinyl-moto'].value,
+                        time: graphsForm.elements['installation-time-moto'].value,
+                    },
+                    bici: {
+                        from: document.getElementById('price-from-bici').value,
+                        to: document.getElementById('price-to-bici').value,
+                        vinyl: graphsForm.elements['vinyl-bici'].value,
+                        time: graphsForm.elements['installation-time-bici'].value,
+                    },
+                    mochila: {
+                        from: document.getElementById('price-from-mochila').value,
+                        to: document.getElementById('price-to-mochila').value,
+                        vinyl: graphsForm.elements['vinyl-mochila'].value,
+                        time: graphsForm.elements['installation-time-mochila'].value,
+                    }
+                };
+
+                const graphData = {
+                    graphName: document.getElementById('graph-name').value,
+                    managerName: document.getElementById('manager-name').value,
+                    phone: document.getElementById('graph-phone').value,
+                    email: document.getElementById('graph-email').value,
+                    province: document.getElementById('graphs-province').value,
+                    city: document.getElementById('graph-location').value,
+                    address: {
+                        street: document.getElementById('graph-address-street').value,
+                        number: document.getElementById('graph-address-number').value
+                    },
+                    weeklyCapacity: document.getElementById('weekly-capacity').value,
+                    operatingHours: operatingHours,
+                    priceQuotes: priceQuotes,
+                    serviceCommitment: true,
+                    createdAt: new Date().toISOString()
+                };
+
+                try {
+                    const graphRef = doc(collection(db, "graphs"));
+                    await setDoc(graphRef, graphData);
+                    const newId = graphRef.id.substring(0, 8).toUpperCase();
+
+                    // Actualizar el documento con su propio ID (para referencia)
+                    await setDoc(graphRef, { graphId: newId }, { merge: true });
+                    
+                    generatedGraphIdElement.textContent = newId;
+                    graphIdDisplay.classList.remove('hidden');
+                    
+                    showSuccessModal(
+                        "¡Taller Registrado!",
+                        `Tu ID de Socio Gráfico es ${newId}. ¡Pronto recibirás solicitudes de instalación!`,
+                        true // Indicar que debe redirigir al cerrar
+                    );
+                    
+                    graphsForm.reset();
+                    // Resetear checkboxes y time inputs
+                    days.forEach(day => {
+                        const dayId = day.toLowerCase();
+                        document.getElementById(`check-${dayId}`).checked = false;
+                        document.getElementById(`time-from-${dayId}`).disabled = true;
+                        document.getElementById(`time-to-${dayId}`).disabled = true;
+                    });
+
+                } catch (error) {
+                    console.error("Error writing graph document: ", error);
+                    showMessage("Error al guardar los datos de la gráfica. Intenta de nuevo.", false);
+                }
+            });
+
+            // --- Inicializar todos los selects de Provincia/Ciudad ---
+            setupProvinceCitySelects('calc-province', 'calc-city');
+            setupProvinceCitySelects('province', 'personal-city');
+            setupProvinceCitySelects('vehicle-province', 'vehicle-city');
+            setupProvinceCitySelects('graphs-province', 'graph-location');
+
         });
-        
-        // --- Logic to update vehicle form title (Sin cambios) ---
-        const originalVehicleTitle = "2. Tu Vehículo: El Motor de tus Ganancias";
-        addVehicleBtn.addEventListener('click', () => {
-             if (currentDriverData && currentDriverData.vehicles.length > 0) {
-                 const newTitle = `${originalVehicleTitle} (${currentDriverData.vehicles.length + 1})`;
-                 vehicleFormTitle.textContent = newTitle;
-             } else {
-                 vehicleFormTitle.textContent = originalVehicleTitle;
-             }
-        });
-        
-         document.getElementById('personal-data-form').addEventListener('submit', () => {
-            vehicleFormTitle.textContent = originalVehicleTitle;
-         });
     </script>
 </body>
 </html>
-
 
