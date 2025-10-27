@@ -1124,6 +1124,38 @@
             }, 5000);
         };
 
+        // --- [NUEVO] Custom Smooth Scroll Function ---
+        function customSmoothScroll(targetPosition, duration) {
+            const startPosition = window.pageYOffset;
+            const distance = targetPosition - startPosition;
+            let startTime = null;
+
+            // Easing function (ease-in-out quad)
+            // t = currentTime, b = startValue, c = changeInValue, d = duration
+            const easeInOutQuad = (t, b, c, d) => {
+                t /= d / 2;
+                if (t < 1) return c / 2 * t * t + b;
+                t--;
+                return -c / 2 * (t * (t - 2) - 1) + b;
+            };
+
+            function animationLoop(currentTime) {
+                if (startTime === null) startTime = currentTime;
+                const timeElapsed = currentTime - startTime;
+                const nextScrollPosition = easeInOutQuad(timeElapsed, startPosition, distance, duration);
+
+                window.scrollTo(0, nextScrollPosition);
+
+                if (timeElapsed < duration) {
+                    requestAnimationFrame(animationLoop);
+                } else {
+                    window.scrollTo(0, targetPosition); // Asegura que termine exactamente en el destino
+                }
+            }
+
+            requestAnimationFrame(animationLoop);
+        }
+
 
         // --- Firebase Setup ---
         const firebaseConfig = { /* ... firebase config ... */
@@ -1498,13 +1530,44 @@
             const activityFeed = document.getElementById('activity-feed');
             if(activityFeed) { /* ... activity feed logic ... */
                  const activities = ["Hace 5 min: Campaña de Gaseosa verificada en Rosario.", "Hace 12 min: Nuevo Socio Conductor (Moto) registrado en Palermo.", "Hace 28 min: Campaña de Supermercado verificada en Córdoba.", "Hace 47 min: TallerFlash Campaña de Bicis verificada en Mendoza."]; let activityIndex = 0;
-                 const updateActivity = () => { const text = activities[activityIndex]; activityFeed.innerHTML = ''; text.split('').forEach((char, index) => { const span = document.createElement('span'); span.textContent = char; span.style.animationDelay = `${index * 0.03}s`; activityFeed.appendChild(span); }); activityIndex = (activityIndex + 1) % activities.length; }; updateActivity(); setInterval(updateActivity, 5000);
+                 const updateActivity = () => {
+                     const text = activities[activityIndex];
+                     activityFeed.innerHTML = '';
+                     text.split('').forEach((char, index) => {
+                         const span = document.createElement('span');
+                         // [CAMBIO] Si el caracter es un espacio, usa un 'non-breaking space' para forzar su renderizado
+                         if (char === ' ') {
+                             span.innerHTML = '&nbsp;';
+                         } else {
+                             span.textContent = char;
+                         }
+                         span.style.animationDelay = `${index * 0.03}s`;
+                         activityFeed.appendChild(span);
+                     });
+                     activityIndex = (activityIndex + 1) % activities.length;
+                 };
+                 updateActivity();
+                 setInterval(updateActivity, 5000);
             } else { console.warn("Activity feed not found."); }
 
             // Scroll Arrow
             const scrollArrow = document.getElementById('scroll-arrow');
             if(scrollArrow) { /* ... scroll arrow logic ... */
-                scrollArrow.addEventListener('click', (e) => { e.preventDefault(); const heroSection = scrollArrow.closest('section'); if (heroSection) { const heroHeight = heroSection.offsetHeight; window.scrollTo({ top: heroHeight - 80, behavior: 'smooth' }); } });
+                scrollArrow.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const heroSection = scrollArrow.closest('section');
+                    if (heroSection) {
+                        const heroHeight = heroSection.offsetHeight;
+                        const header = document.querySelector('header'); // Obtenemos el header
+                        const headerHeight = header ? header.offsetHeight : 80; // Usamos su altura real o un fallback
+                        const targetPosition = heroHeight - headerHeight; // Destino justo debajo del header
+
+                        // [CAMBIO] Llama a la función de scroll personalizada con una duración larga (2500ms)
+                        customSmoothScroll(targetPosition, 2500);
+
+                        // [Original] window.scrollTo({ top: heroHeight - 80, behavior: 'smooth' });
+                    }
+                });
             } else { console.warn("Scroll arrow not found."); }
 
             // Calculadora de Impacto
@@ -1913,6 +1976,8 @@
     </script>
 </body>
 </html>
+
+
 
 
 
