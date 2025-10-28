@@ -74,6 +74,7 @@
             bottom: -0.5rem;
             width: 2px;
             background-color: #d1d5db; /* gray-300 */
+            z-index: 0; /* [CAMBIO] Pone la línea en el 'piso' del stacking context */
         }
         .timeline-item:last-child:before {
             display: none;
@@ -327,7 +328,8 @@
 
             <!-- SECCIÓN 2: SOCIOS DE MARCA -->
             <section id="marcas" class="py-10 bg-gray-900 relative z-30 -mt-24 rounded-t-2xl">
-                 <div class="container mx-auto px-6 text-center">
+                 <!-- [CAMBIO] Añadido 'overflow-hidden' para forzar el corte de la marquesina en móviles -->
+                 <div class="container mx-auto px-6 text-center overflow-hidden">
                     <h2 class="text-xl font-semibold text-gray-300 mb-8">Marcas que confían en nosotros para rodar su mensaje</h2>
                     <div class="marquee-wrapper">
                         <div class="marquee-content">
@@ -456,21 +458,21 @@
                     <div class="timeline-container grid md:grid-cols-3 gap-12">
                         <div class="timeline-item">
                             <div class="timeline-dot">1</div>
-                            <!-- [CAMBIO] Añadida clase 'relative' para que el texto se ponga sobre la línea -->
-                            <h3 class="text-xl font-semibold mb-2 relative">Diseña tu Alcance</h3>
-                            <p class="text-gray-600 relative">Usa el cotizador para elegir superficie (cm²), zonas de interés y duración. Define tu impacto.</p>
+                            <!-- [CAMBIO] Añadido 'z-10' para elevar el texto sobre la línea (que tiene z-0) -->
+                            <h3 class="text-xl font-semibold mb-2 relative z-10">Diseña tu Alcance</h3>
+                            <p class="text-gray-600 relative z-10">Usa el cotizador para elegir superficie (cm²), zonas de interés y duración. Define tu impacto.</p>
                         </div>
                         <div class="timeline-item">
                             <div class="timeline-dot">2</div>
-                            <!-- [CAMBIO] Añadida clase 'relative' para que el texto se ponga sobre la línea -->
-                            <h3 class="text-xl font-semibold mb-2 relative">Producción Rápida</h3>
-                            <p class="text-gray-600 relative">Aprobado el diseño, nuestra red de socios gráficos fabrica e instala tu publicidad en tiempo récord.</p>
+                            <!-- [CAMBIO] Añadido 'z-10' para elevar el texto sobre la línea (que tiene z-0) -->
+                            <h3 class="text-xl font-semibold mb-2 relative z-10">Producción Rápida</h3>
+                            <p class="text-gray-600 relative z-10">Aprobado el diseño, nuestra red de socios gráficos fabrica e instala tu publicidad en tiempo récord.</p>
                         </div>
                         <div class="timeline-item">
                             <div class="timeline-dot">3</div>
-                            <!-- [CAMBIO] Añadida clase 'relative' para que el texto se ponga sobre la línea -->
-                            <h3 class="text-xl font-semibold mb-2 relative">Verificación en Vivo</h3>
-                            <p class="text-gray-600 relative">Accede a reportes y fotos de los vehículos en la calle. Mide tu impacto y ROI en tiempo real desde tu panel.</p>
+                            <!-- [CAMBIO] Añadido 'z-10' para elevar el texto sobre la línea (que tiene z-0) -->
+                            <h3 class="text-xl font-semibold mb-2 relative z-10">Verificación en Vivo</h3>
+                            <p class="text-gray-600 relative z-10">Accede a reportes y fotos de los vehículos en la calle. Mide tu impacto y ROI en tiempo real desde tu panel.</p>
                         </div>
                     </div>
                 </div>
@@ -549,7 +551,8 @@
 
             <!-- SECCIÓN 7: GALERÍA -->
             <section class="py-20 bg-gray-50">
-                <div class="container mx-auto px-6">
+                <!-- [CAMBIO] Añadido 'overflow-hidden' para forzar el corte de la marquesina en móviles -->
+                <div class="container mx-auto px-6 overflow-hidden">
                     <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Campañas en acción</h2>
                     <div class="marquee-wrapper">
                         <div class="marquee-content marquee-gallery">
@@ -1984,6 +1987,7 @@
     </script>
 </body>
 </html>
+
 
 
 
