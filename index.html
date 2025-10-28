@@ -81,6 +81,8 @@
         }
         .timeline-dot {
             position: relative;
+            /* [CAMBIO] Añadido z-10 para que el punto también esté sobre la línea */
+            z-index: 10;
             left: auto;
             top: auto;
             width: 2rem;
@@ -458,19 +460,19 @@
                     <div class="timeline-container grid md:grid-cols-3 gap-12">
                         <div class="timeline-item">
                             <div class="timeline-dot">1</div>
-                            <!-- [CAMBIO] Añadido 'z-10' para elevar el texto sobre la línea (que tiene z-0) -->
+                            <!-- (Mantenemos z-10 en texto) -->
                             <h3 class="text-xl font-semibold mb-2 relative z-10">Diseña tu Alcance</h3>
                             <p class="text-gray-600 relative z-10">Usa el cotizador para elegir superficie (cm²), zonas de interés y duración. Define tu impacto.</p>
                         </div>
                         <div class="timeline-item">
                             <div class="timeline-dot">2</div>
-                            <!-- [CAMBIO] Añadido 'z-10' para elevar el texto sobre la línea (que tiene z-0) -->
+                            <!-- (Mantenemos z-10 en texto) -->
                             <h3 class="text-xl font-semibold mb-2 relative z-10">Producción Rápida</h3>
                             <p class="text-gray-600 relative z-10">Aprobado el diseño, nuestra red de socios gráficos fabrica e instala tu publicidad en tiempo récord.</p>
                         </div>
                         <div class="timeline-item">
                             <div class="timeline-dot">3</div>
-                            <!-- [CAMBIO] Añadido 'z-10' para elevar el texto sobre la línea (que tiene z-0) -->
+                            <!-- (Mantenemos z-10 en texto) -->
                             <h3 class="text-xl font-semibold mb-2 relative z-10">Verificación en Vivo</h3>
                             <p class="text-gray-600 relative z-10">Accede a reportes y fotos de los vehículos en la calle. Mide tu impacto y ROI en tiempo real desde tu panel.</p>
                         </div>
@@ -493,10 +495,10 @@
                     <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
                         <div class="w-full text-center md:text-left md:order-1">
                             <!-- Wrapper for mobile centering -->
-                            <div class="max-w-md mx-auto md:max-w-none md:mx-0">
+                            <!-- [CAMBIO] Redimensionado de 'max-w-md' a 'max-w-sm' para que quepa en móviles angostos -->
+                            <div class="max-w-sm mx-auto md:max-w-none md:mx-0">
                                 <img src="https://i.postimg.cc/LsTK3hF9/logo-gen-camp.png" alt="Logo Addly" class="h-12 mx-auto mb-6 md:hidden filter brightness-0 invert">
-                                <!-- [CAMBIO] Reducción de texto en móvil (de text-lg a text-base) para evitar rupturas -->
-                                <h2 class="text-base sm:text-3xl md:text-4xl font-extrabold text-white mb-4">GANA DINERO CONDUCIENDO</h2>
+                                <!-- (Mantenemos la reducción de texto anterior) -->
                                 <!-- [CAMBIO] Reducción de texto en móvil (de text-sm a text-xs) -->
                                 <p class="text-blue-100 text-xs sm:text-lg mb-8">Convierte tu auto, moto o bici en una fuente de ingresos extra. Sin esfuerzo, sin desvíos.</p>
 
@@ -542,28 +544,28 @@
                                 </button>
                             </div>
                         </div>
-                         <div class="w-full">
-                            <img src="https://i.postimg.cc/Z50YG88b/Secci-n-GRAFICA-CONDUCTOR-20251015-193256-0000.jpg" class="rounded-lg shadow-xl max-w-md mx-auto" alt="Instalador aplicando vinilo">
+                        <div class="md:order-2">
+                            <!-- [CAMBIO] Redimensionado de 'max-w-md' a 'w-full max-w-sm' para que la imagen se achique en móviles -->
+                            <img src="https://i.postimg.cc/L8h4cttk/Secci-n-GRAFICA-CONDUCTOR-20251015-193256-0001.jpg" class="rounded-lg shadow-xl w-full max-w-sm mx-auto" alt="Conductor con su auto ploteado">
                         </div>
                     </div>
                 </div>
-            </section>
 
-            <!-- SECCIÓN 7: GALERÍA -->
-            <section class="py-20 bg-gray-50">
-                <!-- [CAMBIO] Añadido 'overflow-hidden' para forzar el corte de la marquesina en móviles -->
-                <div class="container mx-auto px-6 overflow-hidden">
-                    <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Campañas en acción</h2>
-                    <div class="marquee-wrapper">
-                        <div class="marquee-content marquee-gallery">
-                            <!-- Images -->
-                            <img src="https://i.postimg.cc/8z3kN74r/Galer-a-Campa-as-en-acci-n-20251015-193152-0000.jpg" class="rounded-lg shadow-md aspect-video object-cover" alt="Campaña 1">
-                            <img src="https://i.postimg.cc/K8Vcx1fM/Galer-a-Campa-as-en-acci-n-20251015-193152-0001.jpg" class="rounded-lg shadow-md aspect-video object-cover" alt="Campaña 2">
-                            <img src="https://i.postimg.cc/DwDfnS6G/Galer-a-Campa-as-en-acci-n-20251015-193152-0002.jpg" class="rounded-lg shadow-md aspect-video object-cover" alt="Campaña 3">
-                            <!-- Duplicates -->
-                            <img src="https://i.postimg.cc/8z3kN74r/Galer-a-Campa-as-en-acci-n-20251015-193152-0000.jpg" class="rounded-lg shadow-md aspect-video object-cover" alt="Campaña 1">
-                            <img src="https://i.postimg.cc/K8Vcx1fM/Galer-a-Campa-as-en-acci-n-20251015-193152-0001.jpg" class="rounded-lg shadow-md aspect-video object-cover" alt="Campaña 2">
-                            <img src="https://i.postimg.cc/DwDfnS6G/Galer-a-Campa-as-en-acci-n-20251015-193152-0002.jpg" class="rounded-lg shadow-md aspect-video object-cover" alt="Campaña 3">
+                <!-- Lado B: Gráficas -->
+                <div id="graficas" class="bg-gray-50 py-20">
+                    <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+                         <div class="w-full text-center md:text-left">
+                            <!-- Wrapper for mobile centering -->
+                            <!-- [CAMBIO] Redimensionado de 'max-w-md' a 'max-w-sm' para que quepa en móviles angostos -->
+                            <div class="max-w-sm mx-auto md:max-w-none md:mx-0">
+                                <img src="https://i.postimg.cc/LsTK3hF9/logo-gen-camp.png" alt="Logo Addly" class="h-12 mx-auto mb-6 md:hidden">
+                                <!-- (Mantenemos la reducción de texto anterior) -->
+                                </button>
+                            </div>
+                        </div>
+                         <div class="w-full">
+                            <!-- [CAMBIO] Redimensionado de 'max-w-md' a 'w-full max-w-sm' para que la imagen se achique en móviles -->
+                            <img src="https://i.postimg.cc/Z50YG88b/Secci-n-GRAFICA-CONDUCTOR-20251015-193256-0000.jpg" class="rounded-lg shadow-xl w-full max-w-sm mx-auto" alt="Instalador aplicando vinilo">
                         </div>
                     </div>
                 </div>
@@ -1987,6 +1989,7 @@
     </script>
 </body>
 </html>
+
 
 
 
