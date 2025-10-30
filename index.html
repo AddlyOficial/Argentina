@@ -62,8 +62,8 @@
             text-align: center;
             padding-left: 1rem;
             padding-right: 1rem;
-            /* [CAMBIO] Añadido fondo blanco para tapar la línea vertical en móvil */
-            background-color: #ffffff;
+            /* [CAMBIO] Fondo blanco ya no es necesario, la línea se oculta */
+            /* background-color: #ffffff; */
         }
         .timeline-item:before {
             content: '';
@@ -74,14 +74,15 @@
             bottom: -0.5rem;
             width: 2px;
             background-color: #d1d5db; /* gray-300 */
-            z-index: 0; /* [CAMBIO] Pone la línea en el 'piso' del stacking context */
+            z-index: 0; /* Pone la línea en el 'piso' del stacking context */
+            display: none; /* [CAMBIO] Oculta la línea vertical en móvil */
         }
         .timeline-item:last-child:before {
             display: none;
         }
         .timeline-dot {
             position: relative;
-            /* [CAMBIO] Añadido z-10 para que el punto también esté sobre la línea */
+            /* [CAMBIO] z-10 para que el punto esté sobre la línea (ahora oculta, pero buena práctica) */
             z-index: 10;
             left: auto;
             top: auto;
@@ -127,7 +128,7 @@
                 text-align: center;
             }
             .timeline-item:before {
-                 display: none;
+                 display: none; /* Redundante ahora, pero correcto */
             }
              .timeline-dot {
                 position: absolute;
@@ -159,7 +160,6 @@
 
         /* Marquee Styles */
         .marquee-wrapper {
-            /* [CAMBIO CLAVE] Revertido a 'hidden'. 'auto' rompía el layout de toda la página en móvil. */
             overflow-x: hidden;
             position: relative;
             width: 100%;
@@ -1979,5 +1979,4 @@
     </script>
 </body>
 </html>
-
 
