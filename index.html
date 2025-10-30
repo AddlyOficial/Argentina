@@ -662,9 +662,9 @@
                             </div>
                             <div class="mb-5">
                                 <label for="address-street" class="block text-gray-600 font-medium mb-2">Dirección</label>
-                                <div class="flex gap-4">
-                                    <input type="text" id="address-street" name="address-street" class="flex-grow px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Calle" required>
-                                    <input type="text" id="address-number" name="address-number" class="w-1/3 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Número" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 sm:gap-4 gap-y-5">
+                                    <input type="text" id="address-street" name="address-street" class="flex-grow px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors sm:col-span-2" placeholder="Calle" required>
+                                    <input type="text" id="address-number" name="address-number" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors sm:col-span-1" placeholder="Número" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
                                 </div>
                             </div>
                             <div class="mb-5">
@@ -767,9 +767,9 @@
                             </div>
                              <div class="mb-5">
                                 <label for="address-street-vehicle" class="block text-gray-600 font-medium mb-2">Dirección de Residencia (del vehículo)</label>
-                                <div class="flex gap-4">
-                                    <input type="text" id="address-street-vehicle" name="address-street-vehicle" class="flex-grow px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Calle. Para coordinar la instalación." required>
-                                    <input type="text" id="address-number-vehicle" name="address-number-vehicle" class="w-1/3 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Número" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 sm:gap-4 gap-y-5">
+                                    <input type="text" id="address-street-vehicle" name="address-street-vehicle" class="flex-grow px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors sm:col-span-2" placeholder="Calle. Para coordinar la instalación." required>
+                                    <input type="text" id="address-number-vehicle" name="address-number-vehicle" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors sm:col-span-1" placeholder="Número" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
                                 </div>
                             </div>
                              <div class="mb-5">
@@ -860,9 +860,9 @@
                         </div>
                         <div class="mb-5">
                             <label for="graph-address-street" class="block text-gray-600 font-medium mb-2">Dirección del Taller</label>
-                            <div class="flex gap-4">
-                                <input type="text" id="graph-address-street" name="graph-address-street" class="flex-grow px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Calle. Dinos dónde te encontramos." required>
-                                <input type="text" id="graph-address-number" name="graph-address-number" class="w-1/3 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Número" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 sm:gap-4 gap-y-5">
+                                <input type="text" id="graph-address-street" name="graph-address-street" class="flex-grow px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors sm:col-span-2" placeholder="Calle. Dinos dónde te encontramos." required>
+                                <input type="text" id="graph-address-number" name="graph-address-number" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors sm:col-span-1" placeholder="Número" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
                             </div>
                         </div>
                          <div class="mb-5">
@@ -1744,10 +1744,20 @@
 
                     // Attempt to save the current form data if it exists
                     if (hasUnsavedData) {
-                        const saved = saveVehicleData();
-                        if (!saved) {
-                             // If saving the last vehicle fails (e.g., validation), stop here. Message is shown in saveVehicleData.
-                             return;
+                        // Check if the unsaved data is *valid*
+                        const vehicleDataForm = document.getElementById('vehicle-data-form');
+                        const constraints = { 'year': (v) => v.length === 4 && parseInt(v) > 1980 && parseInt(v) <= new Date().getFullYear() + 1 };
+                        
+                        if (validateForm(vehicleDataForm, constraints)) {
+                            // If it's valid, save it.
+                            saveVehicleData(); // This will pass validation again and return true
+                        } else {
+                            // It's invalid. Per request, ignore this data and proceed.
+                            // Just clear the red "invalid" markers so they don't persist.
+                            if (vehicleDataForm) {
+                                vehicleDataForm.querySelectorAll('.invalid-field').forEach(f => f.classList.remove('invalid-field'));
+                            }
+                            // Do not return, just continue to the next check.
                         }
                     }
 
@@ -1969,4 +1979,5 @@
     </script>
 </body>
 </html>
+
 
