@@ -206,6 +206,22 @@
 </head>
 <body class="bg-white">
 
+    <!-- [NUEVO] Botón Flotante de Ayuda (WhatsApp) -->
+    <!-- 
+      - z-50 para estar sobre todo (excepto el modal que se superpone)
+      - bottom-24 (móvil): Se posiciona 6rem (96px) desde abajo. El CTA móvil mide ~3.5rem (56px) + 1rem padding (16px) = ~80px. Esto deja espacio.
+      - left-4 (móvil): 1rem desde la izquierda.
+      - md:bottom-8 (desktop): 2rem desde abajo, espejando el CTA derecho.
+      - md:left-8 (desktop): 2rem desde la izquierda.
+    -->
+    <a href="https://wa.me/message/B4B2BFKSPAUBI1" target="_blank" rel="noopener noreferrer" 
+       id="floating-help-button" 
+       class="fixed bottom-24 left-4 md:bottom-8 md:left-8 z-50 
+              bg-green-600 text-white font-bold py-3 px-5 rounded-lg shadow-xl 
+              transition-all duration-300 hover:bg-green-700 hover:scale-105 transform">
+        Ayuda
+    </a>
+
     <!-- Modal de Éxito -->
     <div id="success-modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden opacity-0">
         <div id="success-modal-box" class="bg-white rounded-2xl shadow-xl p-8 max-w-sm w-full text-center transform scale-95 opacity-0">
@@ -952,7 +968,7 @@
                                              <div class="flex items-center justify-center gap-2">
                                                 <label for="price-from-luneta" class="text-sm text-gray-600">DESDE</label><input type="text" id="price-from-luneta" name="price-from-luneta" class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" placeholder="$">
                                                 <span class="text-gray-600 font-bold">-</span>
-                                                <label for="price-to-luneta" class="text-sm text-gray-600">HASTA</label><input type="text" id="price-to-luneta" name="price-to-luneta" class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" placeholder="$">
+                                                <label for="price-to-luneta" class="text-sm text-gray-600">HASTA</LAbel><input type="text" id="price-to-luneta" name="price-to-luneta" class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" placeholder="$">
                                             </div>
                                              <div><input type="text" name="vinyl-luneta" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors placeholder:text-center" placeholder="Tipo de vinilo"></div>
                                              <div class="flex justify-center items-center gap-2"><input type="text" name="installation-time-luneta" class="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-center" placeholder="Ej: 1" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');"><span class="text-gray-600">horas</span></div>
@@ -979,7 +995,7 @@
                                         <div class="flex items-center justify-center gap-2">
                                             <label for="price-from-bici" class="text-sm text-gray-600">DESDE</label><input type="text" id="price-from-bici" name="price-from-bici" class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" placeholder="$">
                                             <span class="text-gray-600 font-bold">-</span>
-                                            <label for="price-to-bici" class="text-sm text-gray-600">HASTA</label><input type="text" id="price-to-bici" name="price-to-bici" class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" placeholder="$">
+                                            <label for="price-to-bici" class="text-sm text-gray-600">HASTA</LABEL><input type="text" id="price-to-bici" name="price-to-bici" class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" placeholder="$">
                                         </div>
                                          <div><input type="text" name="vinyl-bici" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors placeholder:text-center" placeholder="Tipo de vinilo"></div>
                                          <div class="flex justify-center items-center gap-2"><input type="text" name="installation-time-bici" class="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-center" placeholder="Ej: 1" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');"><span class="text-gray-600">horas</span></div>
@@ -1031,6 +1047,10 @@
         //  CTA Flotantes
         const floatingCtaMobile = document.getElementById('floating-cta-mobile');
         const floatingCtaDesktop = document.getElementById('floating-cta-desktop');
+        
+        // [NUEVO] Botón de Ayuda - No necesita lógica JS, pero lo declaramos por si acaso
+        const floatingHelpButton = document.getElementById('floating-help-button');
+
 
         // --- Helper Functions ---
         // (showSuccessModal, hideSuccessModal, handleModalClose, showMessage)
@@ -1180,6 +1200,11 @@
                 if(initialView) initialView.classList.add('hidden'); // Use classList for consistency
                 if(appContent) appContent.classList.remove('hidden');
                 window.scrollTo(0, 0);
+                
+                // [MODIFICACIÓN DE LÓGICA]
+                // El JS original esconde los CTAs. No tocamos esta lógica
+                // porque el botón de Ayuda NO está siendo controlado aquí,
+                // ya que está fuera de 'initial-view' y 'app-content'.
                 if (floatingCtaMobile) floatingCtaMobile.style.display = 'none';
                 if (floatingCtaDesktop) floatingCtaDesktop.style.display = 'none';
             } else { console.error(`Section ID '${sectionId}' not found.`); }
@@ -1189,6 +1214,9 @@
             if(initialView) initialView.classList.remove('hidden');
             if(appContent) appContent.classList.add('hidden');
             window.scrollTo(0, 0);
+
+            // [MODIFICACIÓN DE LÓGICA]
+            // El JS original muestra los CTAs. No tocamos esta lógica.
             if (floatingCtaMobile) floatingCtaMobile.style.display = ''; // Use empty string to reset display
             if (floatingCtaDesktop) floatingCtaDesktop.style.display = '';
         }
