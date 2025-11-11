@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -203,6 +204,16 @@
             100% { transform: translateX(-50%); }
         }
     </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.29.0"
+  }
+}
+</script>
 </head>
 <body class="bg-white">
 
@@ -1436,23 +1447,39 @@
             if (!vehicleDataForm) return false;
             const constraints = { 'year': (v) => v.length === 4 && parseInt(v) > 1980 && parseInt(v) <= new Date().getFullYear() + 1 };
             
-            // [MODIFICADO] Esta función 'validateForm' AHORA incluye la validación de zonas.
             if (!validateForm(vehicleDataForm, constraints)) {
                  showMessage('Por favor complete todos los campos obligatorios del vehículo.', false);
                  return false;
             }
-             
-             // [ELIMINADO] El chequeo de 'currentZones.length < 3' es ahora REDUNDANTE.
-             // 'validateForm' ya lo maneja y hace focus en el campo de zonas si falla.
-             /* if (currentZones.length < 3) {
-                 showMessage('Debe agregar al menos 3 zonas de circulación habitual.', false);
-                 if (zoneInput) zoneInput.classList.add('invalid-field');
-                 return false;
-             }
-             */
 
             if (!currentDriverData) { console.error("No currentDriverData."); return false; }
             if (!currentDriverData.vehicles) currentDriverData.vehicles = [];
+
+            // [NUEVO] Lógica para crear el objeto vehicleParts
+            const vehicleType = vehicleTypeSelect?.value;
+            let vehicleParts = {};
+
+            if (vehicleType === 'AUTO/CAMIONETA') {
+                vehicleParts = {
+                  "capot": "disponible",
+                  "puerta_chofer": "disponible",
+                  "puerta_pasajero": "disponible",
+                  "puerta_trasera_izq": "disponible",
+                  "puerta_trasera_der": "disponible",
+                  "baul": "disponible",
+                  "parabrisas_trasero": "disponible"
+                };
+            } else if (vehicleType === 'MOTO') {
+                vehicleParts = {
+                  "moto_completa": "disponible",
+                  "moto_mochila": "disponible"
+                };
+            } else if (vehicleType === 'BICI') {
+                vehicleParts = {
+                  "bici_solo": "disponible",
+                  "bici_mochila": "disponible"
+                };
+            }
 
             const colorEl = document.getElementById('color');
             const vpEl = document.getElementById('vehicle-province');
@@ -1460,7 +1487,7 @@
             const asvEl = document.getElementById('address-street-vehicle');
             const anvEl = document.getElementById('address-number-vehicle');
             const wbEl = document.getElementById('wants-backpack');
-            const imageEl = document.getElementById('image'); // Get image input
+            const imageEl = document.getElementById('image');
 
              const vehicleData = {
                 type: vehicleTypeSelect?.value,
@@ -1469,13 +1496,12 @@
                 city: vcEl?.value,
                 address: { street: asvEl?.value, number: anvEl?.value },
                 zones: [...currentZones],
+                vehicleParts: vehicleParts, // <-- ¡CAMBIO APLICADO!
                 brand: (!brandInput || !brandInput.required) ? null : brandInput.value,
                 model: (!modelInput || !modelInput.required) ? null : modelInput.value,
                 year: (!yearInput || !yearInput.required) ? null : yearInput.value,
                 licensePlate: (!licensePlateInput || !licensePlateInput.required) ? null : licensePlateInput.value,
                 wantsBackpack: wbEl?.checked,
-                // Image handling will be done just before saving to DB if needed, or handle URL if storing elsewhere
-                // imageBase64: null // Placeholder if converting before save
              };
 
              currentDriverData.vehicles.push(vehicleData);
@@ -1823,17 +1849,23 @@
                              return { ...vehicle, imageBase64, vehicleId }; // Add image and ID
                          }));
 
+                         // [NUEVO] Consolidar todas las partes de los vehículos en un solo objeto a nivel principal.
+                         const consolidatedVehicleParts = currentDriverData.vehicles.reduce((acc, vehicle) => {
+                             if (vehicle.vehicleParts) {
+                                 Object.assign(acc, vehicle.vehicleParts);
+                             }
+                             return acc;
+                         }, {});
+
                          // [MODIFICADO] Preparar datos finales para guardar
                          const dataToSave = { 
                              ...currentDriverData, 
                              vehicles: vehiclesWithImagesAndIds, // Usar vehículos procesados
-                             driverId: newId // Guardar también el ID como un campo interno
+                             driverId: newId, // Guardar también el ID como un campo interno
+                             vehicleParts: consolidatedVehicleParts // <-- ¡CAMBIO APLICADO!
                          }; 
 
                         await setDoc(driverRef, dataToSave); // Guardar todos los datos con el ID personalizado
-
-                        // [ELIMINADO] Ya no se actualiza el ID después, se crea con él.
-                        // await setDoc(driverRef, { driverId: newId }, { merge: true }); 
 
                         if(generatedIdElement) generatedIdElement.textContent = newId;
                         if(driverIdDisplay) driverIdDisplay.classList.remove('hidden');
@@ -2007,4 +2039,3 @@
     </script>
 </body>
 </html>
-
